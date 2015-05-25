@@ -1,26 +1,11 @@
-import Unit
-from Unit import *
-
 class Layer:
     "Layer of network"
-    def __init__(self):
+    def __init__(self, inputs, numNodes):
         super(Layer, self).__init__()
-        self.__components = []
-        self.__previous = []
+        self.__inputs = inputs
+        self.__matrix = []
 
-    def addComponent(self, component):
-        self.__components.append(component)
-
-    def getWeight(self):
-        weight = 0
-        for i in range(0, len(self.__components)):
-            weight = weight + self.__components[i].getWeight()
-
-        return weight
-
-    def indexUnit(self, index):
-        return self.__components[index - 1]
-
-    def __len__(self):
-        return len(self.__components)
+    def generateMatrix(self):
+        for i in range(1, len(self.__inputs)):
+            self.__matrix[i-1] = [self.input[i].getWeights]
 
