@@ -1,6 +1,3 @@
-import Unit
-from Unit import *
-
 class Layer:
     "Layer of network"
     def __init__(self):

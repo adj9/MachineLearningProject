@@ -1,6 +1,3 @@
-import Layer
-from Layer import *
-
 # La weights matrix risultante   è strutturata in questo modo:
 # Layer di Inpur
 # 1° Layer nascosto
