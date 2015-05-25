@@ -1,6 +1,6 @@
 __author__ = 'Riccardo Perego'
 
-import naiveBayes
+import BayesianClassifier.naiveBayes as nb
 
 reader = open('fiori.csv', 'r')
 
@@ -11,4 +11,4 @@ for row in reader:
 print(attr)
 print(attr[0][0])
 
-naiveBayes.naiveB(attr)
+nb.naiveB(attr)
