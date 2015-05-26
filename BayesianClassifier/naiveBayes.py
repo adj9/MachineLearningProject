@@ -1,10 +1,11 @@
 __author__ = 'antoniograndinetti'
 
+numeroBin = 10
 
 def naiveB(dataset):
-    calcolaProbPriori(dataset)
-    discretizzazione(dataset)
-
+    #calcolaProbPriori(dataset)
+    #discretizzazione(dataset)
+    calcolaDiscreto(dataset)
     return
 
 
@@ -126,5 +127,110 @@ def discretizzazione(dataset):
 
 
 
+
+    return
+
+def calcolaDiscreto(dataset):
+
+    colonna1 = list(zip(*dataset))[0]
+    colonna1 = [float(i) for i in colonna1]
+    rangeColonna1 = [min(colonna1), max(colonna1)]
+    grandezzaBinX1 = (rangeColonna1[1] - rangeColonna1[0])/numeroBin
+
+    binX1 = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]]
+
+    for i in range(len(dataset)):
+        if (float(dataset[i][0]) >= rangeColonna1[0]) & (float(dataset[i][0]) < rangeColonna1[0]+grandezzaBinX1):
+            if dataset[i][4] == "Iris-setosa\n":
+                binX1[0][0] = binX1[0][0] + 1
+            elif dataset[i][4] == "Iris-versicolor\n":
+                binX1[0][1] = binX1[0][1] + 1
+            else:
+                binX1[0][2] = binX1[0][2] + 1
+
+        elif (float(dataset[i][0]) >= rangeColonna1[0]+grandezzaBinX1) & (float(dataset[i][0]) < rangeColonna1[0]+grandezzaBinX1*2):
+            if dataset[i][4] == "Iris-setosa\n":
+                binX1[1][0] = binX1[1][0] + 1
+            elif dataset[i][4] == "Iris-versicolor\n":
+                binX1[1][1] = binX1[1][1] + 1
+            else:
+                binX1[1][2] = binX1[1][2] + 1
+
+        elif (float(dataset[i][0]) >= rangeColonna1[0]+grandezzaBinX1*2) & (float(dataset[i][0]) < rangeColonna1[0]+grandezzaBinX1*3):
+            if dataset[i][4] == "Iris-setosa\n":
+                binX1[2][0] = binX1[2][0] + 1
+            elif dataset[i][4] == "Iris-versicolor\n":
+                binX1[2][1] = binX1[2][1] + 1
+            else:
+                binX1[2][2] = binX1[2][2] + 1
+
+        elif (float(dataset[i][0]) >= rangeColonna1[0]+grandezzaBinX1*3) & (float(dataset[i][0]) < rangeColonna1[0]+grandezzaBinX1*4):
+            if dataset[i][4] == "Iris-setosa\n":
+                binX1[3][0] = binX1[3][0] + 1
+            elif dataset[i][4] == "Iris-versicolor\n":
+                binX1[3][1] = binX1[3][1] + 1
+            else:
+                binX1[3][2] = binX1[3][2] + 1
+
+        elif (float(dataset[i][0]) >= rangeColonna1[0]+grandezzaBinX1*4) & (float(dataset[i][0]) < rangeColonna1[0]+grandezzaBinX1*5):
+            if dataset[i][4] == "Iris-setosa\n":
+                binX1[4][0] = binX1[4][0] + 1
+            elif dataset[i][4] == "Iris-versicolor\n":
+                binX1[4][1] = binX1[4][1] + 1
+            else:
+                binX1[4][2] = binX1[4][2] + 1
+
+        elif (float(dataset[i][0]) >= rangeColonna1[0]+grandezzaBinX1*5) & (float(dataset[i][0]) < rangeColonna1[0]+grandezzaBinX1*6):
+            if dataset[i][4] == "Iris-setosa\n":
+                binX1[5][0] = binX1[5][0] + 1
+            elif dataset[i][4] == "Iris-versicolor\n":
+                binX1[5][1] = binX1[5][1] + 1
+            else:
+                binX1[5][2] = binX1[5][2] + 1
+
+        elif (float(dataset[i][0]) >= rangeColonna1[0]+grandezzaBinX1*6) & (float(dataset[i][0]) < rangeColonna1[0]+grandezzaBinX1*7):
+            if dataset[i][4] == "Iris-setosa\n":
+                binX1[6][0] = binX1[6][0] + 1
+            elif dataset[i][4] == "Iris-versicolor\n":
+                binX1[6][1] = binX1[6][1] + 1
+            else:
+                binX1[6][2] = binX1[6][2] + 1
+
+        elif (float(dataset[i][0]) >= rangeColonna1[0]+grandezzaBinX1*7) & (float(dataset[i][0]) < rangeColonna1[0]+grandezzaBinX1*8):
+            if dataset[i][4] == "Iris-setosa\n":
+                binX1[7][0] = binX1[7][0] + 1
+            elif dataset[i][4] == "Iris-versicolor\n":
+                binX1[7][1] = binX1[7][1] + 1
+            else:
+                binX1[7][2] = binX1[7][2] + 1
+
+        elif (float(dataset[i][0]) >= rangeColonna1[0]+grandezzaBinX1*8) & (float(dataset[i][0]) < rangeColonna1[0]+grandezzaBinX1*9):
+            if dataset[i][4] == "Iris-setosa\n":
+                binX1[8][0] = binX1[8][0] + 1
+            elif dataset[i][4] == "Iris-versicolor\n":
+                binX1[8][1] = binX1[8][1] + 1
+            else:
+                binX1[8][2] = binX1[8][2] + 1
+
+        elif (float(dataset[i][0]) >= rangeColonna1[0]+grandezzaBinX1*9) & (float(dataset[i][0]) <= rangeColonna1[0]+grandezzaBinX1*10):
+            if dataset[i][4] == "Iris-setosa\n":
+                binX1[9][0] = binX1[9][0] + 1
+            elif dataset[i][4] == "Iris-versicolor\n":
+                binX1[9][1] = binX1[9][1] + 1
+            else:
+                binX1[9][2] = binX1[9][2] + 1
+
+
+    probCondX1 = binX1
+
+    print(binX1)
+
+    for i in range(len(binX1)):
+        sommariga=binX1[i][0]+binX1[i][1]+binX1[i][2]
+        for j in range(0,3):
+            probCondX1[i][j]=binX1[i][j]/sommariga
+            print(probCondX1[i][j])
+
+    print(probCondX1)
 
     return
