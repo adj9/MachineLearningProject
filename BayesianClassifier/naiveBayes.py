@@ -1,12 +1,13 @@
 __author__ = 'antoniograndinetti'
 
+num_bin = 10
 
 def naiveB(dataset):
-    calcolaProbPriori(dataset)
-    discretizzazione(dataset)
+    # calcolaProbPriori(dataset)
+    # discretizzazione(dataset)
+    calcolaDiscreto(dataset)
 
     return
-
 
 def calcolaProbPriori(dataset):
     ultimaColonna = list(zip(*dataset))[-1]
@@ -25,19 +26,18 @@ def calcolaProbPriori(dataset):
             numSetosa = numSetosa + 1
 
         elif ultimaColonna[i] == "Iris-versicolor\n":
-            numVersicolor = numVersicolor +1
+            numVersicolor = numVersicolor + 1
 
         else:
             numVerginica = numVerginica + 1
-
 
     print(numSetosa)
     print(numVersicolor)
     print(numVerginica)
 
-    probSetosa = numSetosa/len(ultimaColonna)
-    probVersicolor = numVersicolor/len(ultimaColonna)
-    probVerginica = numVerginica/len(ultimaColonna)
+    probSetosa = numSetosa / len(ultimaColonna)
+    probVersicolor = numVersicolor / len(ultimaColonna)
+    probVerginica = numVerginica / len(ultimaColonna)
 
     print(probSetosa)
     # print(ultimaColonna.count("Iris-setosa\n"))
@@ -45,9 +45,7 @@ def calcolaProbPriori(dataset):
 
     return
 
-
 def discretizzazione(dataset):
-
     listaSetosa = []
     listaVersicolor = []
     listaVerginica = []
@@ -62,7 +60,6 @@ def discretizzazione(dataset):
 
         else:
             listaVerginica.append(dataset[i])
-
 
     setosa1 = list(zip(*listaSetosa))[0]
     setosa1 = [float(i) for i in setosa1]
@@ -124,7 +121,58 @@ def discretizzazione(dataset):
     rangeVerginica4 = [min(verginica4), max(verginica4)]
     print(rangeVerginica4)
 
+    return
 
+def calcolaDiscreto(dataset):
 
+    bin_x1 = countBin(dataset,0)
+    prob_cond_x1 = []
+
+    for j in range(num_bin):
+        prob_cond_x1.append([0, 0, 0])
+
+    for i in range(len(bin_x1)):
+        sommariga = bin_x1[i][0] + bin_x1[i][1] + bin_x1[i][2]
+        for j in range(0,3):
+            prob_cond_x1[i][j] = bin_x1[i][j]/sommariga
+
+    print(bin_x1)
+    print(prob_cond_x1)
 
     return
+
+def countBin(dataset, position):
+    bin_x = []
+
+    for j in range(num_bin):
+        bin_x.append([0, 0, 0])
+
+    x = list(zip(*dataset))[position]
+    x = [float(i) for i in x]
+    min_x = min(x)
+    max_x = max(x)
+    grandezza_bin = (max_x - min_x) / num_bin
+
+    for i in range(len(dataset)):
+        start_bin = min_x
+        for j in range(1, num_bin + 1):
+            end_bin = min_x + grandezza_bin * j
+
+            if (j < num_bin) & (float(dataset[i][0]) >= start_bin) & (float(dataset[i][0]) < end_bin):
+                if dataset[i][4] == "Iris-setosa\n":
+                    bin_x[j - 1][0] += 1
+                elif dataset[i][4] == "Iris-versicolor\n":
+                    bin_x[j - 1][1] += 1
+                else:
+                    bin_x[j - 1][2] += 1
+            elif (float(dataset[i][0]) >= start_bin) & (float(dataset[i][0]) <= end_bin):
+                if dataset[i][4] == "Iris-setosa\n":
+                    bin_x[j - 1][0] += 1
+                elif dataset[i][4] == "Iris-versicolor\n":
+                    bin_x[j - 1][1] += 1
+                else:
+                    bin_x[j - 1][2] += 1
+
+            start_bin = end_bin
+
+    return bin_x
