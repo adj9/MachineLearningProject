@@ -2,13 +2,13 @@ class Input:
     def __init__(self, value, weights):
         super(Input, self).__init__()
         self.__value = value
-        self.__weights = []
+        self.__weights = weights
 
-    def getValue(self):
+    def get_value(self):
         return self.__value
 
-    def getWeights(self):
+    def get_weights(self):
         return self.__weights
 
-    def getIndexWheight(self, index):
+    def get_index_weight(self, index):
         return self.__weights[index]

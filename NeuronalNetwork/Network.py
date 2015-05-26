@@ -9,12 +9,11 @@
 
 class Network:
     ""
-    def __init__(self, inputs):
+    def __init__(self):
         super(Network, self).__init__()
-        self._inputs = inputs
         self.__layers = []
 
-    def addFirstLayer(self, layer):
+    def add_layer(self, layer):
         self.__layers.append(layer)
 
     def addLayer(self):

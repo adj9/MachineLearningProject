@@ -27,12 +27,17 @@ sigmoid1th = lambda x: exp(x) / pow((exp(x) + 1), 2)
 
 x1 = Input(1, [-1, -1])
 x2 = Input(1, [-1, -1])
-rete = Network([x1, x2])
 
-strato = Layer([x1, x2])
-strato.generateMatrix()
-rete.addFirstLayer(strato)
+strato1 = Layer([x1, x2])
+strato1.generate_matrix()
 
+unita1 = Unit(strato1.get_weights_in(0), -1.5, soglia)
+unita2 = Unit(strato1.get_weights_in(1), -0.5. soglia)
+
+strato2 = Layer([unita1, unita2])
+strato2.generate_matrix()
+
+print(strato1.get_matrix())
 #TODO Creare il secondo strato con i valori dei pesi calcolati con la funzione soglia
 
 # lInput = Layer()
