@@ -159,20 +159,20 @@ def countBin(dataset, position):
             end_bin = min_x + grandezza_bin * j
 
             if (j < num_bin) & (float(dataset[i][0]) >= start_bin) & (float(dataset[i][0]) < end_bin):
-                if dataset[i][4] == "Iris-setosa\n":
-                    bin_x[j - 1][0] += 1
-                elif dataset[i][4] == "Iris-versicolor\n":
-                    bin_x[j - 1][1] += 1
-                else:
-                    bin_x[j - 1][2] += 1
+                bin_x = increase_bin(dataset[i][4], bin_x, j-1)
             elif (float(dataset[i][0]) >= start_bin) & (float(dataset[i][0]) <= end_bin):
-                if dataset[i][4] == "Iris-setosa\n":
-                    bin_x[j - 1][0] += 1
-                elif dataset[i][4] == "Iris-versicolor\n":
-                    bin_x[j - 1][1] += 1
-                else:
-                    bin_x[j - 1][2] += 1
+                bin_x = increase_bin(dataset[i][4], bin_x, j-1)
 
             start_bin = end_bin
+
+    return bin_x
+
+def increase_bin(dataset, bin_x, i):
+    if dataset == "Iris-setosa\n":
+        bin_x[i][0] += 1
+    elif dataset == "Iris-versicolor\n":
+        bin_x[i][1] += 1
+    else:
+        bin_x[i][2] += 1
 
     return bin_x
