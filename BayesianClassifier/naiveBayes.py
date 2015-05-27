@@ -5,7 +5,7 @@ num_bin = 10
 def naiveB(dataset):
     # calcolaProbPriori(dataset)
     # discretizzazione(dataset)
-    calcolaDiscreto(dataset)
+    calcola_discreto(dataset)
 
     return
 
@@ -123,9 +123,9 @@ def discretizzazione(dataset):
 
     return
 
-def calcolaDiscreto(dataset):
+def calcola_discreto(dataset):
 
-    bin_x1 = countBin(dataset,0)
+    bin_x1 = count_bin(dataset, 0)
     prob_cond_x1 = []
 
     for j in range(num_bin):
@@ -134,14 +134,14 @@ def calcolaDiscreto(dataset):
     for i in range(len(bin_x1)):
         sommariga = bin_x1[i][0] + bin_x1[i][1] + bin_x1[i][2]
         for j in range(0,3):
-            prob_cond_x1[i][j] = bin_x1[i][j]/sommariga
+            prob_cond_x1[i][j] = round(bin_x1[i][j]/sommariga, 2)
 
     print(bin_x1)
     print(prob_cond_x1)
 
     return
 
-def countBin(dataset, position):
+def count_bin(dataset, position):
     bin_x = []
 
     for j in range(num_bin):
@@ -158,9 +158,9 @@ def countBin(dataset, position):
         for j in range(1, num_bin + 1):
             end_bin = min_x + grandezza_bin * j
 
-            if (j < num_bin) & (float(dataset[i][0]) >= start_bin) & (float(dataset[i][0]) < end_bin):
+            if (j < num_bin) & (float(dataset[i][position]) >= start_bin) & (float(dataset[i][position]) < end_bin):
                 bin_x = increase_bin(dataset[i][4], bin_x, j-1)
-            elif (float(dataset[i][0]) >= start_bin) & (float(dataset[i][0]) <= end_bin):
+            elif (float(dataset[i][position]) >= start_bin) & (float(dataset[i][position]) <= end_bin):
                 bin_x = increase_bin(dataset[i][4], bin_x, j-1)
 
             start_bin = end_bin
