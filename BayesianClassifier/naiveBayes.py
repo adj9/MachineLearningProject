@@ -2,6 +2,7 @@ __author__ = 'antoniograndinetti'
 
 num_bin = 10
 
+
 def naiveB(dataset):
     prob_cond_x = [0, 0, 0, 0]
 
@@ -12,9 +13,10 @@ def naiveB(dataset):
     for i in range(4):
         prob_cond_x[i] = calcola_prob_condizionata(dataset, i)
 
-    classificatore(dataset,dataset[25], prob_priori, prob_cond_x)
+    classificatore(dataset, dataset[25], prob_priori, prob_cond_x)
 
     return
+
 
 def calcolaProbPriori(dataset):
     ultimaColonna = list(zip(*dataset))[-1]
@@ -50,6 +52,7 @@ def calcolaProbPriori(dataset):
     # print(ultimaColonna.count("Iris-setosa\n"))
 
     return [probSetosa, probVersicolor, probVerginica]
+
 
 def discretizzazione(dataset):
     listaSetosa = []
@@ -129,6 +132,7 @@ def discretizzazione(dataset):
 
     return
 
+
 def calcola_prob_condizionata(dataset, position):
     bin_x = count_bin(dataset, position)
     prob_cond_x = []
@@ -149,6 +153,7 @@ def calcola_prob_condizionata(dataset, position):
     print(prob_cond_x)
 
     return prob_cond_x
+
 
 def count_bin(dataset, position):
     bin_x = []
@@ -176,6 +181,7 @@ def count_bin(dataset, position):
 
     return bin_x
 
+
 def increase_bin(dataset, bin_x, i):
     if dataset == "Iris-setosa\n":
         bin_x[i][0] += 1
@@ -186,15 +192,13 @@ def increase_bin(dataset, bin_x, i):
 
     return bin_x
 
-def trova_bin(dataset, position, element):
 
+def trova_bin(dataset, position, element):
     x = list(zip(*dataset))[position]
     x = [float(i) for i in x]
     min_x = min(x)
     max_x = max(x)
     grandezza_bin = (max_x - min_x) / num_bin
-
-    print('Massimo:', max_x, 'Minimo:', min_x, 'Grandezza:', grandezza_bin)
 
     for i in range(len(dataset)):
         start_bin = min_x
@@ -202,13 +206,14 @@ def trova_bin(dataset, position, element):
             end_bin = min_x + grandezza_bin * j
 
             if (j < num_bin) & (float(element) >= start_bin) & (float(element) < end_bin):
-                return i
+                return j - 1
             elif (float(element) >= start_bin) & (float(element) <= end_bin):
-                return i
+                return j - 1
 
             start_bin = end_bin
 
     return None
+
 
 def classificatore(dataset, x, prob_priori, prob_condizionate):
     indice = [0, 0, 0, 0]
@@ -217,16 +222,13 @@ def classificatore(dataset, x, prob_priori, prob_condizionate):
     prob_post_virginica = 1
 
     for i in range(4):
-        indice[i] = trova_bin(dataset,i, x[i])
-        print('xi:', x[i], i)
-        print('cosa che vuoi sapere 0:', prob_condizionate[i][indice[i]][0])
-        print('cosa che vuoi sapere 1:', prob_condizionate[i][indice[i]][1])
-        print('cosa che vuoi sapere 2:', prob_condizionate[i][indice[i]][2])
+        indice[i] = trova_bin(dataset, i, x[i])
         prob_post_setosa = prob_condizionate[i][indice[i]][0] * prob_post_setosa
         prob_post_versicolor = prob_condizionate[i][indice[i]][1] * prob_post_versicolor
         prob_post_virginica = prob_condizionate[i][indice[i]][2] * prob_post_virginica
-        print('Prob setosa', prob_post_setosa)
-        print('Prob versi color', prob_post_versicolor)
-        print('Prob virginica', prob_post_virginica)
+
+    print('Prob a posteriori a setosa:', round(prob_priori[0] * prob_post_setosa, 3))
+    print('Prob a posteriori a versi color:', round(prob_priori[1] * prob_post_versicolor, 3))
+    print('Prob a posteriori a virginica:', round(prob_priori[2] * prob_post_virginica, 3))
 
     return
