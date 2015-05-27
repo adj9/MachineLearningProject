@@ -3,9 +3,16 @@ __author__ = 'antoniograndinetti'
 num_bin = 10
 
 def naiveB(dataset):
-    # calcolaProbPriori(dataset)
+    prob_cond_x = [0, 0, 0, 0]
+
+    prob_priori = calcolaProbPriori(dataset)
+    print(prob_priori)
     # discretizzazione(dataset)
-    calcola_discreto(dataset)
+
+    for i in range(4):
+        prob_cond_x[i] = calcola_prob_condizionata(dataset, i)
+
+    classificatore(dataset,dataset[25], prob_priori, prob_cond_x)
 
     return
 
@@ -42,8 +49,7 @@ def calcolaProbPriori(dataset):
     print(probSetosa)
     # print(ultimaColonna.count("Iris-setosa\n"))
 
-
-    return
+    return [probSetosa, probVersicolor, probVerginica]
 
 def discretizzazione(dataset):
     listaSetosa = []
@@ -123,23 +129,26 @@ def discretizzazione(dataset):
 
     return
 
-def calcola_discreto(dataset):
-
-    bin_x1 = count_bin(dataset, 0)
-    prob_cond_x1 = []
+def calcola_prob_condizionata(dataset, position):
+    bin_x = count_bin(dataset, position)
+    prob_cond_x = []
 
     for j in range(num_bin):
-        prob_cond_x1.append([0, 0, 0])
+        prob_cond_x.append([0, 0, 0])
 
-    for i in range(len(bin_x1)):
-        sommariga = bin_x1[i][0] + bin_x1[i][1] + bin_x1[i][2]
-        for j in range(0,3):
-            prob_cond_x1[i][j] = round(bin_x1[i][j]/sommariga, 2)
+    for i in range(len(bin_x)):
+        sommariga = bin_x[i][0] + bin_x[i][1] + bin_x[i][2]
+        for j in range(0, 3):
+            if sommariga != 0:
+                prob_cond_x[i][j] = bin_x[i][j] / sommariga
+            else:
+                prob_cond_x[i][j] = 0
 
-    print(bin_x1)
-    print(prob_cond_x1)
+    print('----------------------------------------------------------------------------------------------------------')
+    print(bin_x)
+    print(prob_cond_x)
 
-    return
+    return prob_cond_x
 
 def count_bin(dataset, position):
     bin_x = []
@@ -159,9 +168,9 @@ def count_bin(dataset, position):
             end_bin = min_x + grandezza_bin * j
 
             if (j < num_bin) & (float(dataset[i][position]) >= start_bin) & (float(dataset[i][position]) < end_bin):
-                bin_x = increase_bin(dataset[i][4], bin_x, j-1)
+                bin_x = increase_bin(dataset[i][4], bin_x, j - 1)
             elif (float(dataset[i][position]) >= start_bin) & (float(dataset[i][position]) <= end_bin):
-                bin_x = increase_bin(dataset[i][4], bin_x, j-1)
+                bin_x = increase_bin(dataset[i][4], bin_x, j - 1)
 
             start_bin = end_bin
 
@@ -176,3 +185,48 @@ def increase_bin(dataset, bin_x, i):
         bin_x[i][2] += 1
 
     return bin_x
+
+def trova_bin(dataset, position, element):
+
+    x = list(zip(*dataset))[position]
+    x = [float(i) for i in x]
+    min_x = min(x)
+    max_x = max(x)
+    grandezza_bin = (max_x - min_x) / num_bin
+
+    print('Massimo:', max_x, 'Minimo:', min_x, 'Grandezza:', grandezza_bin)
+
+    for i in range(len(dataset)):
+        start_bin = min_x
+        for j in range(1, num_bin + 1):
+            end_bin = min_x + grandezza_bin * j
+
+            if (j < num_bin) & (float(element) >= start_bin) & (float(element) < end_bin):
+                return i
+            elif (float(element) >= start_bin) & (float(element) <= end_bin):
+                return i
+
+            start_bin = end_bin
+
+    return None
+
+def classificatore(dataset, x, prob_priori, prob_condizionate):
+    indice = [0, 0, 0, 0]
+    prob_post_setosa = 1
+    prob_post_versicolor = 1
+    prob_post_virginica = 1
+
+    for i in range(4):
+        indice[i] = trova_bin(dataset,i, x[i])
+        print('xi:', x[i], i)
+        print('cosa che vuoi sapere 0:', prob_condizionate[i][indice[i]][0])
+        print('cosa che vuoi sapere 1:', prob_condizionate[i][indice[i]][1])
+        print('cosa che vuoi sapere 2:', prob_condizionate[i][indice[i]][2])
+        prob_post_setosa = prob_condizionate[i][indice[i]][0] * prob_post_setosa
+        prob_post_versicolor = prob_condizionate[i][indice[i]][1] * prob_post_versicolor
+        prob_post_virginica = prob_condizionate[i][indice[i]][2] * prob_post_virginica
+        print('Prob setosa', prob_post_setosa)
+        print('Prob versi color', prob_post_versicolor)
+        print('Prob virginica', prob_post_virginica)
+
+    return
