@@ -175,7 +175,7 @@ def classificatore(dataset_train, attributo, prob_priori, prob_condizionate):
 # Calcolo l'accuratezza
 
 def calcola_accuratezza(classificazione, data_test):
-    #print(data_test)
+
     x = list(zip(*data_test))[-1]
     classe = np.ones(len(x))
     for i in range(len(x)):
@@ -186,35 +186,17 @@ def calcola_accuratezza(classificazione, data_test):
         else:
             classe[i] = 2
 
-    fp = 0
-    fn = 0
     tp = 0
     tn = 0
+
     for i in range(len(classe)):
-        if classe[i] == 0 and classificazione[i][1] == classe[i]:
-            tn += 1
-        elif classe[i] == 1 and classificazione[i][1] == classe[i]:
-            tp += 1
-        elif classe[i] == 0 and classificazione[i][1] != classe[i]:
-            fp += 1
-        elif classe[i] == 1 and classificazione[i][1] != classe[i]:
-            fn += 1
+       if classificazione[i][1] == classe[i]:
+           tp += 1
+       else:
+           tn += 1
 
-    #
-    if tp != 0:
-        sensitivity = round(tp / (tp + fn), 3)
-    else:
-        sensitivity = 0
+    accurancy = tp  / len(data_test)
+    #print('Accurancy', tp, '/', len(data_test))
 
-    #
-    if tn != 0:
-        specificity = round(tn / (tn + fp), 3)
-    else:
-        specificity = 0
-
-    if tp != 0 and tn != 0:
-        accurancy = (tp + tn) / len(data_test)
-    else:
-        accurancy = 0
 
     return accurancy
