@@ -6,7 +6,7 @@ num_bin = 10
 import numpy as np
 
 
-def naiveB(data_train, data_test):
+def naive_bayes(data_train, data_test):
     prob_cond_x = [0, 0, 0, 0]
 
     # Calcolo la probabilità a priori del training-set
@@ -21,10 +21,11 @@ def naiveB(data_train, data_test):
     for j in range(len(data_test)):
         classificazione[j] = classificatore(data_train, data_test[j], prob_priori, prob_cond_x)
 
-    print(classificazione)
+    #calcola_accuratezza(classificazione, data_test)
 
-    return
+    return calcola_accuratezza(classificazione, data_test)
 
+# Calcolo le probabilità a priori
 
 def calcolaProbPriori(dataset):
     ultimaColonna = list(zip(*dataset))[-1]
@@ -57,6 +58,7 @@ def calcolaProbPriori(dataset):
 
     return [probSetosa, probVersicolor, probVerginica]
 
+# Calcolo le probabilità condizionate
 
 def calcola_prob_condizionata(dataset, position):
     bin_x = count_bin(dataset, position)
@@ -75,6 +77,7 @@ def calcola_prob_condizionata(dataset, position):
 
     return prob_cond_x
 
+#
 
 def count_bin(dataset, position):
     bin_x = []
@@ -102,11 +105,12 @@ def count_bin(dataset, position):
 
     return bin_x
 
+# Conta il numero di occorrenze dei target nel training-set
 
-def increase_bin(dataset, bin_x, i):
-    if dataset == "Iris-setosa\n":
+def increase_bin(target_train, bin_x, i):
+    if target_train == "Iris-setosa\n":
         bin_x[i][0] += 1
-    elif dataset == "Iris-versicolor\n":
+    elif target_train == "Iris-versicolor\n":
         bin_x[i][1] += 1
     else:
         bin_x[i][2] += 1
@@ -165,5 +169,34 @@ def classificatore(dataset_train, attributo, prob_priori, prob_condizionate):
     # Lista delle probabilità a posteriori del singolo attributo
     listaProb = [prob_setosa, prob_versicolor, prob_virginica]
 
-    # Restituisco il Max delle probabilità a posteriori dell'attributo
+    # Restituisco il Max delle probabilità a posteriori dell'attributo ed il suo indice
     return max(listaProb), listaProb.index(max(listaProb))
+
+# Calcolo l'accuratezza
+
+def calcola_accuratezza(classificazione, data_test):
+
+    x = list(zip(*data_test))[-1]
+    classe = np.ones(len(x))
+    for i in range(len(x)):
+        if x[i] == "Iris-setosa\n":
+            classe[i] = 0
+        elif x[i] == "Iris-versicolor\n":
+            classe[i] = 1
+        else:
+            classe[i] = 2
+
+    tp = 0
+    tn = 0
+
+    for i in range(len(classe)):
+       if classificazione[i][1] == classe[i]:
+           tp += 1
+       else:
+           tn += 1
+
+    accurancy = tp  / len(data_test)
+    #print('Accurancy', tp, '/', len(data_test))
+
+
+    return accurancy
