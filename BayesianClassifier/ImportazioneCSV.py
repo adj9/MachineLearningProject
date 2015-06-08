@@ -44,3 +44,14 @@ for i in range(k):
 
 print(accurancy)
 print(round(np.average(accurancy),3) * 100, '%')
+
+
+var_attr = [0,0,0,0]
+for s in range(4):
+    print(s)
+    attrx = (list(zip(*dataset)))[s]
+    attrx = [float(i) for i in attrx]
+    mediaAttrx = np.mean(attrx)
+    print(mediaAttrx)
+    var_attr[s] = sum([(x - mediaAttrx)**2 for x in attrx]) / len(dataset)
+    print('Varianza :', var_attr)
