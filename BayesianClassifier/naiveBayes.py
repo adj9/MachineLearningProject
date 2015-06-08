@@ -3,18 +3,27 @@ __author__ = 'antoniograndinetti'
 # TODO: capire come funziona l'algoritmo a scatola chiusa
 num_bin = 10
 
+import numpy as np
 
-def naiveB(dataset):
+def naiveB(data_train, data_test):
     prob_cond_x = [0, 0, 0, 0]
 
-    prob_priori = calcolaProbPriori(dataset)
-    print(prob_priori)
+    # Calcolo la probabilità a priori del training-set
+    prob_priori = calcolaProbPriori(data_train)
+    # print(prob_priori)
     # discretizzazione(dataset)
 
+    # Calcolo la probabilità condizionata
     for i in range(4):
-        prob_cond_x[i] = calcola_prob_condizionata(dataset, i)
+        prob_cond_x[i] = calcola_prob_condizionata(data_train, i)
 
-    classificatore(dataset, dataset[25], prob_priori, prob_cond_x)
+    classificazione = list()
+
+    # Classificazione del testing-set
+    for j in range(len(data_test)):
+        classificazione[j] = classificatore(data_train, data_test[j], prob_priori, prob_cond_x)
+        print(classificazione[j])
+
 
     return
 
@@ -41,15 +50,12 @@ def calcolaProbPriori(dataset):
         else:
             numVerginica = numVerginica + 1
 
-    print(numSetosa)
-    print(numVersicolor)
-    print(numVerginica)
 
     probSetosa = numSetosa / len(ultimaColonna)
     probVersicolor = numVersicolor / len(ultimaColonna)
     probVerginica = numVerginica / len(ultimaColonna)
 
-    print(probSetosa)
+
     # print(ultimaColonna.count("Iris-setosa\n"))
 
     return [probSetosa, probVersicolor, probVerginica]
@@ -150,8 +156,6 @@ def calcola_prob_condizionata(dataset, position):
                 prob_cond_x[i][j] = 0
 
     print('----------------------------------------------------------------------------------------------------------')
-    print(bin_x)
-    print(prob_cond_x)
 
     return prob_cond_x
 
@@ -161,8 +165,9 @@ def count_bin(dataset, position):
 
     for j in range(num_bin):
         bin_x.append([0, 0, 0])
-
+    print(dataset)
     x = list(zip(*dataset))[position]
+    print(x)
     x = [float(i) for i in x]
     min_x = min(x)
     max_x = max(x)
@@ -218,10 +223,13 @@ def trova_bin(dataset, position, element):
 
 def classificatore(dataset, x, prob_priori, prob_condizionate):
     indice = [0, 0, 0, 0]
+
+    # Inizializzo le probabilità iniziali a posteriori a 1
     prob_post_setosa = 1
     prob_post_versicolor = 1
     prob_post_virginica = 1
 
+    # Calcolo le probabilità a posteriori
     for i in range(4):
         indice[i] = trova_bin(dataset, i, x[i])
         prob_post_setosa = prob_condizionate[i][indice[i]][0] * prob_post_setosa
@@ -233,9 +241,5 @@ def classificatore(dataset, x, prob_priori, prob_condizionate):
     prob_virginica = round(prob_priori[2] * prob_post_virginica, 3)
 
     listaProb = [prob_setosa, prob_versicolor, prob_virginica]
-    print('Prob finale: ', max(listaProb))
-    print('Prob a posteriori a setosa:', round(prob_setosa, 3))
-    print('Prob a posteriori a versi color:', round(prob_versicolor, 3))
-    print('Prob a posteriori a virginica:', round(prob_virginica, 3))
 
-    return
+    return max(listaProb)

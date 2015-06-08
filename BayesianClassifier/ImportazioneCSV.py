@@ -1,14 +1,36 @@
 __author__ = 'Riccardo Perego'
 
 import BayesianClassifier.naiveBayes as nb
+import numpy as np
 
+# Importazione file CSV
 reader = open('fiori.csv', 'r')
 
-attr = list()
+# Lettura file CSV
+dataset = list()
 for row in reader:
-    attr.append((row.split(',')))
+    dataset.append((row.split(',')))
 
-#print(attr)
-#print(attr[0][0])
+# Calcolo size del dataset e divido per K sottoinsiemi
+k = 10
+size_dataset = int(len(dataset)/k)
 
-nb.naiveB(attr)
+part_dataset = list(np.ones(k))
+
+j = 0
+for x in range(k):
+    part_dataset[x] = dataset[j:j+size_dataset]
+    j += size_dataset
+
+#
+# K-Fold Cross Validation
+#
+
+for i in range(k):
+    dataset_test = []
+    dataset_train = []
+    temp_data = part_dataset
+    dataset_test.append(temp_data.pop(i))
+    dataset_train.append(temp_data)
+
+    nb.naiveB(temp_data, dataset_test)
