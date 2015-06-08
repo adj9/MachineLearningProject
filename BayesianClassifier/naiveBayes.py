@@ -1,5 +1,6 @@
 __author__ = 'antoniograndinetti'
-
+# TODO: 10 cross validation, feature selection, grafici e performance del classificatore
+# TODO: capire come funziona l'algoritmo a scatola chiusa
 num_bin = 10
 
 
@@ -233,8 +234,8 @@ def classificatore(dataset, x, prob_priori, prob_condizionate):
 
     listaProb = [prob_setosa, prob_versicolor, prob_virginica]
     print('Prob finale: ', max(listaProb))
-    print('Prob a posteriori a setosa:', round(prob_priori[0] * prob_post_setosa, 3))
-    print('Prob a posteriori a versi color:', round(prob_priori[1] * prob_post_versicolor, 3))
-    print('Prob a posteriori a virginica:', round(prob_priori[2] * prob_post_virginica, 3))
+    print('Prob a posteriori a setosa:', round(prob_setosa, 3))
+    print('Prob a posteriori a versi color:', round(prob_versicolor, 3))
+    print('Prob a posteriori a virginica:', round(prob_virginica, 3))
 
     return
