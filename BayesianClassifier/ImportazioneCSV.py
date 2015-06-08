@@ -30,7 +30,6 @@ for x in range(k):
 # K-Fold Cross Validation
 #
 for i in range(k):
-    dataset_test = []
     dataset_train = list()
     temp_data = part_dataset.copy()
     dataset_test = temp_data.pop(i)
@@ -38,4 +37,4 @@ for i in range(k):
     for z in range(len(temp_data)):
         dataset_train += temp_data[z]
 
-    nb.naiveB(dataset_train, dataset_test)
+    nb.naive_bayes(dataset_train, dataset_test)
