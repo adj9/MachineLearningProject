@@ -23,7 +23,6 @@ def naiveB(data_train, data_test):
 
     print(classificazione)
 
-
     return
 
 
@@ -59,7 +58,6 @@ def calcolaProbPriori(dataset):
     return [probSetosa, probVersicolor, probVerginica]
 
 
-
 def calcola_prob_condizionata(dataset, position):
     bin_x = count_bin(dataset, position)
     prob_cond_x = []
@@ -74,7 +72,6 @@ def calcola_prob_condizionata(dataset, position):
                 prob_cond_x[i][j] = bin_x[i][j] / sommariga
             else:
                 prob_cond_x[i][j] = 0
-
 
     return prob_cond_x
 
@@ -140,6 +137,7 @@ def trova_bin(dataset_train, position, attributo):
             start_bin = end_bin
 
     return None
+
 
 # Classifica l'attributo x
 
