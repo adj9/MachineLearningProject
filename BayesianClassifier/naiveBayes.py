@@ -17,11 +17,10 @@ def naiveB(data_train, data_test):
     for i in range(4):
         prob_cond_x[i] = calcola_prob_condizionata(data_train, i)
 
-    classificazione = list()
-
+    classificazione = list(np.ones(len(data_test)))
     # Classificazione del testing-set
     for j in range(len(data_test)):
-        classificazione[j] = classificatore(data_train, data_test[j], prob_priori, prob_cond_x)
+        classificazione[j] = classificatore(data_train, data_test[13], prob_priori, prob_cond_x)
         print(classificazione[j])
 
 
@@ -165,9 +164,8 @@ def count_bin(dataset, position):
 
     for j in range(num_bin):
         bin_x.append([0, 0, 0])
-    print(dataset)
+
     x = list(zip(*dataset))[position]
-    print(x)
     x = [float(i) for i in x]
     min_x = min(x)
     max_x = max(x)
