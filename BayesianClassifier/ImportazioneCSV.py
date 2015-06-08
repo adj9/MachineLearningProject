@@ -1,10 +1,18 @@
 __author__ = 'Riccardo Perego'
 
-import BayesianClassifier.naiveBayes as nb
+import os
+
 import numpy as np
 
+import BayesianClassifier.NaiveBayes as nb
+
+root_path = os.path.split(os.path.abspath(os.path.dirname(__file__)))[0]
+dataset_path = 'Dataset'
+name_dataset = 'Fiori.csv'
+full_path = os.path.join(root_path, dataset_path, name_dataset)
+
 # Importazione file CSV
-reader = open('fiori.csv', 'r')
+reader = open(full_path, 'r')
 
 # Lettura file CSV
 dataset = list()
@@ -13,13 +21,13 @@ for row in reader:
 
 # Calcolo size del dataset e divido per K sottoinsiemi
 k = 10
-size_dataset = int(len(dataset)/k)
+size_dataset = int(len(dataset) / k)
 
 part_dataset = list(np.ones(k))
 
 j = 0
 for x in range(k):
-    part_dataset[x] = dataset[j:j+size_dataset]
+    part_dataset[x] = dataset[j:j + size_dataset]
     j += size_dataset
 
 #
