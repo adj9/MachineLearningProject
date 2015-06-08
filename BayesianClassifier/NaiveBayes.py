@@ -21,10 +21,9 @@ def naive_bayes(data_train, data_test):
     for j in range(len(data_test)):
         classificazione[j] = classificatore(data_train, data_test[j], prob_priori, prob_cond_x)
 
-    calcola_accuratezza(classificazione, data_test)
-    #print(classificazione)
+    #calcola_accuratezza(classificazione, data_test)
 
-    return
+    return calcola_accuratezza(classificazione, data_test)
 
 # Calcolo le probabilità a priori
 
@@ -186,13 +185,36 @@ def calcola_accuratezza(classificazione, data_test):
             classe[i] = 1
         else:
             classe[i] = 2
-    print(classe)
 
-    falsi_pos = 0
-    falsi_neg = 0
-    veri_pos = 0
-    veri_neg = 0
+    fp = 0
+    fn = 0
+    tp = 0
+    tn = 0
     for i in range(len(classe)):
+        if classe[i] == 0 and classificazione[i][1] == classe[i]:
+            tn += 1
+        elif classe[i] == 1 and classificazione[i][1] == classe[i]:
+            tp += 1
+        elif classe[i] == 0 and classificazione[i][1] != classe[i]:
+            fp += 1
+        elif classe[i] == 1 and classificazione[i][1] != classe[i]:
+            fn += 1
 
+    #
+    if tp != 0:
+        sensitivity = round(tp / (tp + fn), 3)
+    else:
+        sensitivity = 0
 
-    return
+    #
+    if tn != 0:
+        specificity = round(tn / (tn + fp), 3)
+    else:
+        specificity = 0
+
+    if tp != 0 and tn != 0:
+        accurancy = (tp + tn) / len(data_test)
+    else:
+        accurancy = 0
+
+    return accurancy

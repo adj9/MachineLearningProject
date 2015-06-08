@@ -14,6 +14,8 @@ reader = data.get_dataset(name_dataset)
 dataset = list()
 for row in reader:
     dataset.append((row.split(',')))
+#
+np.random.shuffle(dataset)
 
 # Calcolo size del dataset e divido per K sottoinsiemi
 k = 10
@@ -29,6 +31,7 @@ for x in range(k):
 #
 # K-Fold Cross Validation
 #
+accurancy = list()
 for i in range(k):
     dataset_train = list()
     temp_data = part_dataset.copy()
@@ -37,4 +40,7 @@ for i in range(k):
     for z in range(len(temp_data)):
         dataset_train += temp_data[z]
 
-    nb.naive_bayes(dataset_train, dataset_test)
+    accurancy.append(nb.naive_bayes(dataset_train, dataset_test))
+
+print(accurancy)
+print(round(np.average(accurancy),3) * 100, '%')
