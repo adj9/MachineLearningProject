@@ -27,3 +27,13 @@ class MapOutCome:
 
     def get_map(self):
         return self.__map
+
+    def get_countIrisSetosa(self):
+        return  self.__map['Iris-setosa']
+
+    def get_countIrisVersicolor(self):
+        return  self.__map['Iris-versicolor']
+
+    def get_countIrisVirginica(self):
+        return  self.__map['Iris-virginica']
+
