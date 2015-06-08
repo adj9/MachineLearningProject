@@ -55,4 +55,3 @@ for s in range(4):
     print(mediaAttrx)
     var_attr[s] = sum([(x - mediaAttrx)**2 for x in attrx]) / len(dataset)
     print('Varianza :', var_attr)
-    askcgòsdfbsàeivbeklwfbùwidsbvùeirwò
