@@ -227,6 +227,12 @@ def classificatore(dataset, x, prob_priori, prob_condizionate):
         prob_post_versicolor = prob_condizionate[i][indice[i]][1] * prob_post_versicolor
         prob_post_virginica = prob_condizionate[i][indice[i]][2] * prob_post_virginica
 
+    prob_setosa = round(prob_priori[0] * prob_post_setosa, 3)
+    prob_versicolor = round(prob_priori[1] * prob_post_versicolor, 3)
+    prob_virginica = round(prob_priori[2] * prob_post_virginica, 3)
+
+    listaProb = [prob_setosa, prob_versicolor, prob_virginica]
+    print('Prob finale: ', max(listaProb))
     print('Prob a posteriori a setosa:', round(prob_priori[0] * prob_post_setosa, 3))
     print('Prob a posteriori a versi color:', round(prob_priori[1] * prob_post_versicolor, 3))
     print('Prob a posteriori a virginica:', round(prob_priori[2] * prob_post_virginica, 3))
