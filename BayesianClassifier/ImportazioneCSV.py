@@ -1,18 +1,14 @@
 __author__ = 'Riccardo Perego'
 
-import os
-
 import numpy as np
 
 import BayesianClassifier.NaiveBayes as nb
+import Dataset.DatasetReader as data
 
-root_path = os.path.split(os.path.abspath(os.path.dirname(__file__)))[0]
-dataset_path = 'Dataset'
 name_dataset = 'Fiori.csv'
-full_path = os.path.join(root_path, dataset_path, name_dataset)
 
 # Importazione file CSV
-reader = open(full_path, 'r')
+reader = data.get_dataset(name_dataset)
 
 # Lettura file CSV
 dataset = list()
