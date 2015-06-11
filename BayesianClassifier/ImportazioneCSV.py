@@ -4,6 +4,8 @@ import numpy as np
 
 import BayesianClassifier.NaiveBayes as nb
 import Dataset.DatasetReader as data
+import matplotlib.pyplot as plt
+
 
 name_dataset = 'Fiori.csv'
 
@@ -102,3 +104,20 @@ for m in range(4):
 
 
     print(max(avg))
+
+
+# impostazione font assi
+plt.rc('xtick', labelsize=8)
+plt.rc('ytick', labelsize=8)
+
+# creazione canvas (le misure sono in pollici))
+plt.figure(figsize=(5, 5))
+
+# disegno grafico
+plt.plot([1,2,3,4,5], [10,20,30,40,50])
+
+# titolo grafico
+plt.title("test")
+
+# salvataggio su file
+plt.savefig("example.png")

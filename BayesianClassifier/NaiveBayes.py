@@ -194,13 +194,13 @@ def calcola_accuratezza(classificazione, data_test):
             classe[i] = 2
 
     tp = 0
-    tn = 0
+    fp = 0
 
     for i in range(len(classe)):
        if classificazione[i][1] == classe[i]:
            tp += 1
        else:
-           tn += 1
+           fp += 1
 
     accurancy = tp  / len(data_test)
     #print('Accurancy', tp, '/', len(data_test))
