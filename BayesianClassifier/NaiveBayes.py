@@ -13,7 +13,7 @@ def naive_bayes(data_train, data_test):
     prob_priori = calcolaProbPriori(data_train)
 
     # Calcolo la probabilità condizionata
-    for i in range(4):
+    for i in range(len(data_test[0])-1):
         prob_cond_x[i] = calcola_prob_condizionata(data_train, i)
 
     classificazione = list(np.ones(len(data_test)))
@@ -91,15 +91,17 @@ def count_bin(dataset, position):
     max_x = max(x)
     grandezza_bin = (max_x - min_x) / num_bin
 
+    size_data = len(dataset[0])-1
+
     for i in range(len(dataset)):
         start_bin = min_x
         for j in range(1, num_bin + 1):
             end_bin = min_x + grandezza_bin * j
 
             if (j < num_bin) & (float(dataset[i][position]) >= start_bin) & (float(dataset[i][position]) < end_bin):
-                bin_x = increase_bin(dataset[i][4], bin_x, j - 1)
+                bin_x = increase_bin(dataset[i][size_data], bin_x, j - 1)
             elif (float(dataset[i][position]) >= start_bin) & (float(dataset[i][position]) <= end_bin):
-                bin_x = increase_bin(dataset[i][4], bin_x, j - 1)
+                bin_x = increase_bin(dataset[i][size_data], bin_x, j - 1)
 
             start_bin = end_bin
 
@@ -146,7 +148,12 @@ def trova_bin(dataset_train, position, attributo):
 # Classifica l'attributo x
 
 def classificatore(dataset_train, attributo, prob_priori, prob_condizionate):
-    indice = [0, 0, 0, 0]
+    indice = list()
+    # numero di attributi nel dataset
+    size_data = len(dataset_train[0])-1
+
+    for x in range(size_data):
+        indice.append(0)
 
     # Inizializzo le probabilità iniziali a posteriori a 1
     prob_post_setosa = 1
@@ -154,7 +161,7 @@ def classificatore(dataset_train, attributo, prob_priori, prob_condizionate):
     prob_post_virginica = 1
 
     # Calcolo le probabilità a posteriori
-    for i in range(4):
+    for i in range(size_data):
         indice[i] = trova_bin(dataset_train, i, attributo[i])
         # Controllo se l'attributo rientra in un BIN
         if indice[i] is not None:
