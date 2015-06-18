@@ -21,9 +21,9 @@ def naive_bayes(data_train, data_test):
     for j in range(len(data_test)):
         classificazione[j] = classificatore(data_train, data_test[j], prob_priori, prob_cond_x)
 
-    #calcola_accuratezza(classificazione, data_test)
+    #return calcola_accuratezza(classificazione, data_test)
 
-    return calcola_accuratezza(classificazione, data_test)
+    return classificazione
 
 # Calcolo le probabilità a priori
 
@@ -40,10 +40,10 @@ def calcolaProbPriori(dataset):
             esiste[ultimaColonna[i]] = esiste[ultimaColonna[i]]+1
         else:
             esiste.append((ultimaColonna[i], 1))'''
-        if ultimaColonna[i] == "Iris-setosa\n":
+        if ultimaColonna[i] == "Iris-setosa":
             numSetosa = numSetosa + 1
 
-        elif ultimaColonna[i] == "Iris-versicolor\n":
+        elif ultimaColonna[i] == "Iris-versicolor":
             numVersicolor = numVersicolor + 1
 
         else:
@@ -54,7 +54,7 @@ def calcolaProbPriori(dataset):
     probVerginica = numVerginica / len(ultimaColonna)
 
 
-    # print(ultimaColonna.count("Iris-setosa\n"))
+    # print(ultimaColonna.count("Iris-setosa"))
 
     return [probSetosa, probVersicolor, probVerginica]
 
@@ -110,9 +110,9 @@ def count_bin(dataset, position):
 # Conta il numero di occorrenze dei target nel training-set
 
 def increase_bin(target_train, bin_x, i):
-    if target_train == "Iris-setosa\n":
+    if target_train == "Iris-setosa":
         bin_x[i][0] += 1
-    elif target_train == "Iris-versicolor\n":
+    elif target_train == "Iris-versicolor":
         bin_x[i][1] += 1
     else:
         bin_x[i][2] += 1
@@ -177,7 +177,19 @@ def classificatore(dataset_train, attributo, prob_priori, prob_condizionate):
     listaProb = [prob_setosa, prob_versicolor, prob_virginica]
 
     # Restituisco il Max delle probabilità a posteriori dell'attributo ed il suo indice
-    return max(listaProb), listaProb.index(max(listaProb))
+    # return max(listaProb), get_label(listaProb.index(max(listaProb)))
+
+    # Restituisce l'etichetta con la probabilità massima
+    return get_label(listaProb.index(max(listaProb)))
+
+# Restituisce l'etichetta
+def get_label(position):
+    if position == 0:
+        return "Iris-setosa"
+    elif position == 1:
+        return "Iris-versicolor"
+    else:
+        return "Iris-virginica"
 
 # Calcolo l'accuratezza
 
@@ -186,9 +198,9 @@ def calcola_accuratezza(classificazione, data_test):
     x = list(zip(*data_test))[-1]
     classe = np.ones(len(x))
     for i in range(len(x)):
-        if x[i] == "Iris-setosa\n":
+        if x[i] == "Iris-setosa":
             classe[i] = 0
-        elif x[i] == "Iris-versicolor\n":
+        elif x[i] == "Iris-versicolor":
             classe[i] = 1
         else:
             classe[i] = 2
@@ -204,6 +216,5 @@ def calcola_accuratezza(classificazione, data_test):
 
     accurancy = tp  / len(data_test)
     #print('Accurancy', tp, '/', len(data_test))
-
 
     return accurancy

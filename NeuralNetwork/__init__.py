@@ -5,14 +5,14 @@ __author__ = 'Alessandro'
 import math
 from math import exp, pow
 
-import NeuronalNetwork.Unit
-from NeuronalNetwork import *
-import NeuronalNetwork.Layer
-from NeuronalNetwork.Layer import *
-import NeuronalNetwork.Network
-from NeuronalNetwork.Network import *
-import NeuronalNetwork.Input
-from NeuronalNetwork.Input import *
+import NeuralNetwork.Unit
+from NeuralNetwork import *
+import NeuralNetwork.Layer
+from NeuralNetwork.Layer import *
+import NeuralNetwork.Network
+from NeuralNetwork.Network import *
+import NeuralNetwork.Input
+from NeuralNetwork.Input import *
 
 def soglia(x):
     if(x < 0 ):
