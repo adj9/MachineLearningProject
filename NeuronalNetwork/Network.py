@@ -16,8 +16,11 @@ class Network:
     def add_layer(self, layer):
         self.__layers.append(layer)
 
-    def addLayer(self):
-        return
+    def addLayer(self, layer):
+        self.__layers.append(layer)
+
+    def get_layer(self, index):
+        return self.__layers[index]
 
     def countLayers(self):
         return len(self.__layers)

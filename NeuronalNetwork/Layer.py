@@ -3,15 +3,15 @@ class Layer:
     "Layer of network"
     def __init__(self, inputs):
         super(Layer, self).__init__()
-        #self.__units = []
+        self.__units = []
         self.__inputs = inputs
         self.__matrix = []
 
-    # def set_units(self, units):
-    #     self.__units.append(units)
-    #
-    # def get_unit(self, index):
-    #     return self.__units[index]
+    def set_units(self, units):
+        self.__units.append(units)
+
+    def get_unit(self, index):
+        return self.__units[index]
 
     def get_weights_in(self, index):
         result = []
