@@ -1,17 +1,12 @@
-
+from NeuronalNetwork import Unit
 
 __author__ = 'Alessandro'
 
-import math
 from math import exp, pow
 
-import NeuralNetwork.Unit
-from NeuralNetwork import *
-import NeuralNetwork.Layer
 from NeuralNetwork.Layer import *
-import NeuralNetwork.Network
-from NeuralNetwork.Network import *
-import NeuralNetwork.Input
+import NeuronalNetwork.Network
+from NeuronalNetwork.Network import *
 from NeuralNetwork.Input import *
 
 def soglia(x):
