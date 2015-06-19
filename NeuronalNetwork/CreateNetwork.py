@@ -1,8 +1,5 @@
 __author__ = 'Alessandro'
 
-import  os
-import csv
-
 import numpy
 from numpy import zeros
 
@@ -49,8 +46,6 @@ class CreateNethwork:
         res[2] = 1
 
         return res
-
-
 
     def create_nethwork_topology(self):
         layer = Layer()
