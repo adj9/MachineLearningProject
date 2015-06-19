@@ -4,6 +4,7 @@ import numpy as np
 
 import Dataset.DatasetReader as reader
 import BayesianClassifier.NaiveBayes as nb
+import CandidateElimination.candidate_elimination as ce
 
 
 def giudice():
@@ -40,13 +41,14 @@ def giudice():
 
         output_naive_bayes = nb.naive_bayes(dataset_train, dataset_test)
         # TODO: AGGIUNGERE CHIAMATA AGLI ALTRI ALGORITMI
-
+        output_candidate_elimination = ce.candidate(dataset_train, dataset_test)
         # TODO: MODIFICARE VARIABILI DA PASSARE ALLA FUNZIONE GET_CLASSIFICAZIONE
         ris = get_classificazione(output_naive_bayes, output_naive_bayes, output_naive_bayes, output_naive_bayes)
 
         accuracy.append(check_accuracy(ris, dataset_test))
 
     print('Media:', round(np.average(accuracy), 3) * 100, '%')
+
     return
 
 
