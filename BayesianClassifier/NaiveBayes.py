@@ -1,6 +1,7 @@
 __author__ = 'antoniograndinetti'
 # TODO: feature selection, grafici e performance del classificatore
 # TODO: capire come funziona l'algoritmo a scatola chiusa
+
 num_bin = 10
 
 import numpy as np
