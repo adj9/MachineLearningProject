@@ -45,6 +45,7 @@ def giudice():
         # TODO: MODIFICARE VARIABILI DA PASSARE ALLA FUNZIONE GET_CLASSIFICAZIONE
         ris = get_classificazione(output_naive_bayes, output_naive_bayes, output_naive_bayes, output_naive_bayes)
 
+
         accuracy.append(check_accuracy(ris, dataset_test))
 
     print('Media:', round(np.average(accuracy), 3) * 100, '%')
