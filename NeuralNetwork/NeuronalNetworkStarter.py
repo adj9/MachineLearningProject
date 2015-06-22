@@ -1,7 +1,5 @@
 __author__ = 'Alessandro'
 
-import NeuronalNetwork.CreateNetwork as CreateNet
-from NeuronalNetwork.CreateNetwork import *
-
+import NeuralNetwork.CreateNetwork as CreateNet
 
 net = CreateNet('Fiori.csv', [])
