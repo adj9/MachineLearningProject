@@ -11,7 +11,6 @@ class Network:
     #         return 1
     #     else:
     #         return 0
-
     def __init__(self, inputSize, classNames):
         self.inputSize = inputSize;
         self.classNames = classNames;  # classNames sarà = ["Iris-setosa\n", "Iris-virginica\n", "Iris-versicolor\n"]
