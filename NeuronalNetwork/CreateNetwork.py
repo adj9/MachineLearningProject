@@ -1,13 +1,14 @@
+from NeuralNetwork import Layer
+from NeuralNetwork.Unit import Unit
+
 __author__ = 'Alessandro'
 
-import  os
+import os
 import csv
 
 import NeuronalNetwork.Network as Net
 from NeuronalNetwork.Network import *
-import NeuronalNetwork.Layer
 from NeuronalNetwork.Layer import *
-import NeuronalNetwork.Unit
 from  NeuronalNetwork.Unit import *
 
 
@@ -51,7 +52,7 @@ class CreateNethwork:
         for i in range(0, self.__numberHiddenUnit):
             layer.set_units(Unit(0, 1, self.__activating_functions[1]))
 
-# Aggiunta dello strato di intrerno che è composto da quattro unità
+# Aggiunta dello strato di intrerno che ï¿½ composto da quattro unitï¿½
         self.__network.add_layer(layer)
 
 # Aggiunta dello strato di output
