@@ -11,14 +11,14 @@ class Network:
     #         return 1
     #     else:
     #         return 0
-    def __init__(self, inputSize, classNames):
+    def __init__(self, inputSize, classNames, activationFunction):
         self.inputSize = inputSize;
         self.classNames = classNames;  # classNames sarà = ["Iris-setosa\n", "Iris-virginica\n", "Iris-versicolor\n"]
         self.layers = []
         self.tassoApprendimentoAlfa = 0.01  # sparato a caso!!
         self.numLayers = 0
         # activationFunction = math.tanh  # funzione sigmoide
-        self.activationFunction = math.tanh
+        self.__activationFunction = activationFunction
         super(Network, self).__init__()
 
     def addHiddenLayer(self, numNodi):
