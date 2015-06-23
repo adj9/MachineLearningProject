@@ -5,6 +5,7 @@ import numpy as np
 import Dataset.DatasetReader as reader
 import BayesianClassifier.NaiveBayes as nb
 import CandidateElimination.candidate_elimination as ce
+import ANN.NeuronalNetworkStarter as nn
 
 
 def giudice():
@@ -39,14 +40,16 @@ def giudice():
         for z in range(len(temp_data)):
             dataset_train += temp_data[z]
 
-        output_naive_bayes = nb.naive_bayes(dataset_train, dataset_test)
+        # output_naive_bayes = nb.naive_bayes(dataset_train, dataset_test)
         # TODO: AGGIUNGERE CHIAMATA AGLI ALTRI ALGORITMI
-        output_candidate_elimination = ce.candidate(dataset_train, dataset_test)
+        # output_candidate_elimination = ce.candidate(dataset_train, dataset_test)
+        output_nn = nn.neural_network(dataset_train, dataset_test)
         # TODO: MODIFICARE VARIABILI DA PASSARE ALLA FUNZIONE GET_CLASSIFICAZIONE
-        ris = get_classificazione(output_naive_bayes, output_naive_bayes, output_naive_bayes, output_naive_bayes)
+        # ris = get_classificazione(output_naive_bayes, output_naive_bayes, output_naive_bayes, output_naive_bayes)
 
 
-        accuracy.append(check_accuracy(ris, dataset_test))
+
+        # accuracy.append(check_accuracy(ris, dataset_test))
 
     print('Media:', round(np.average(accuracy), 3) * 100, '%')
 
@@ -114,5 +117,5 @@ def get_label(position):
         return "Iris-virginica"
 
 
-if __name__ == "__main__":
-    giudice()
+#if __name__ == "__main__":
+#    giudice()
