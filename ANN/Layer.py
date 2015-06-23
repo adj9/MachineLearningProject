@@ -28,7 +28,7 @@ class Layer:
             self.weightedSum[j] = somma[j] #-self.weightMatrix[i+1][j] # sostanzialmente viene tolto il bias
             #print("weightedSum: ", self.weightedSum)
             #print("output", self.output)
-            self.output[j] = self.activationFun(self.weightedSum[j])
+            self.output[j] = self.__activationFun(self.weightedSum[j])
 
 
 
