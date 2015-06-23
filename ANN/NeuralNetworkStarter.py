@@ -1,6 +1,8 @@
+import copy
+
 __author__ = 'Daniele'
 
-from ANN.Network import *
+from Ann.Network import *
 import numpy as np
 import Dataset.DatasetReader as data
 import math
@@ -14,8 +16,9 @@ def neural_network(dataset_train, dataset_test):
 
     # Selezionare i Target senza duplicazione
     listaClassi = []
-    for c in classiOutput.copy():
-        listaClassi.append(classiOutput.pop())
+
+    for c in classiOutput:
+        listaClassi.append(c)
 
     # Costruzione dell topologie della Rete
     lng = len(dataset_train[0])
@@ -24,7 +27,7 @@ def neural_network(dataset_train, dataset_test):
     rete = Network(numeroInput, listaClassi, math.tanh)
     # Aggiunta degli strati
     rete.addHiddenLayer(4)
-    # Lo strato di Out avrà 3 unità
+    # Lo strato di Out avrï¿½ 3 unitï¿½
     rete.addOutputLayer()
     rete.train(dataset_train)
     # ********************************************
@@ -36,12 +39,12 @@ def neural_network(dataset_train, dataset_test):
     for test in dataset_test:
         outputClass = rete.classify(test[:len(test)-1])
         lableElearning.append(outputClass)
-        # if (outputClass==test[len(test)-1]):
-        #     giuste += 1
-        #     print("<",outputClass[0:len(outputClass)-1],",",test[len(test)-1],"> OK!!!")
-        # else:
-        #     sbagliate +=1
-        #     print("<",outputClass[0:len(outputClass)-1],",",test[len(test)-1],"> SBAGLIATO!")
+        if (outputClass==test[len(test)-1]):
+            giuste += 1
+            print("<",outputClass[0:len(outputClass)-1],",",test[len(test)-1],"> OK!!!")
+        else:
+            sbagliate +=1
+            print("<",outputClass[0:len(outputClass)-1],",",test[len(test)-1],"> SBAGLIATO!")
 
 
     # Stampa della matrici parziale
@@ -50,7 +53,7 @@ def neural_network(dataset_train, dataset_test):
 
     print("giuste ", giuste)
     print("sbagliate ", sbagliate)
-    print("accuracy ",float(giuste)/(giuste+sbagliate))
+#    print("accuracy ",float(giuste)/(giuste+sbagliate))
     return lableElearning
 #
 # reteXOR = Network(2, ['true'], funzioneSoglia)
@@ -64,4 +67,3 @@ def neural_network(dataset_train, dataset_test):
 # print(reteXOR.calculateOutput([1,0]))
 # print(reteXOR.calculateOutput([0,0]))
 # print(reteXOR.calculateOutput([0,1]))
-exit()

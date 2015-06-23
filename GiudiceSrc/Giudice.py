@@ -1,18 +1,18 @@
+import copy
+
 __author__ = 'Nicola'
 
 import numpy as np
 
-import Dataset.DatasetReader as reader
-import BayesianClassifier.NaiveBayes as nb
-import CandidateElimination.candidate_elimination as ce
-import ANN.NeuronalNetworkStarter as nn
+from Dataset.DatasetReader import get_dataset
+import Ann.NeuralNetworkStarter
+from Ann.NeuralNetworkStarter import neural_network
 
-
-def giudice():
+def pippo():
     name_dataset = 'Fiori.csv'
 
     # Recupero il dataset
-    dataset = reader.get_dataset(name_dataset)
+    dataset = get_dataset(name_dataset)
 
     # Randomizzo il dataset
     np.random.shuffle(dataset)
@@ -34,7 +34,7 @@ def giudice():
     accuracy = list()
     for i in range(k):
         dataset_train = list()
-        temp_data = part_dataset.copy()
+        temp_data = copy.deepcopy(part_dataset)  #copia completa
         dataset_test = temp_data.pop(i)
 
         for z in range(len(temp_data)):
@@ -43,18 +43,14 @@ def giudice():
         # output_naive_bayes = nb.naive_bayes(dataset_train, dataset_test)
         # TODO: AGGIUNGERE CHIAMATA AGLI ALTRI ALGORITMI
         # output_candidate_elimination = ce.candidate(dataset_train, dataset_test)
-        output_nn = nn.neural_network(dataset_train, dataset_test)
+        output_nn = neural_network(dataset_train, dataset_test)
         # TODO: MODIFICARE VARIABILI DA PASSARE ALLA FUNZIONE GET_CLASSIFICAZIONE
-        # ris = get_classificazione(output_naive_bayes, output_naive_bayes, output_naive_bayes, output_naive_bayes)
+        ris = get_classificazione(output_nn, output_nn, output_nn, output_nn)
 
-
-
-        # accuracy.append(check_accuracy(ris, dataset_test))
+        accuracy.append(check_accuracy(ris, dataset_test))
 
     print('Media:', round(np.average(accuracy), 3) * 100, '%')
-
-    return
-
+    exit()
 
 # Funzione che "giudica" la classificazione piu probabile
 def get_classificazione(naive_bayes, id3, candidate_elimination, neural_network):
@@ -90,7 +86,6 @@ def incrementa_occorrenze(dataset, num_setosa, num_versicolor, num_virginica):
 
     return num_setosa, num_versicolor, num_virginica
 
-
 def check_accuracy(ris, data_test):
     x = list(zip(*data_test))[-1]
     tp = 0
@@ -118,4 +113,4 @@ def get_label(position):
 
 
 #if __name__ == "__main__":
-#    giudice()
+#    pippo()
