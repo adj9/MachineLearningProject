@@ -18,8 +18,9 @@ class Network:
         self.input_size = input_size
         self.class_names = class_names  # class_names sarà = ["Iris-setosa\n", "Iris-virginica\n", "Iris-versicolor\n"]
         self.layers = []
-        self.tasso_apprendimento_alfa = 0.1# sparato a caso!!
+        self.tasso_apprendimento_alfa = 0.1 # sparato a caso!!
         self.num_layers = 0
+        #self.bias = -1
         # activation_function = math.tanh  # funzione sigmoide
         self.__activation_function = activation_function
 
@@ -113,6 +114,7 @@ class Network:
 
                 prevLayer = outputLayer
                 for l in range(len(self.layers) - 2, -1, -1): #For l = L-1 a 1
+                    # inizializzazione dei dati per la back-propagation
                     hiddenLayer = self.layers[l]
                     oldDelta = delta
                     somma = zeros(hiddenLayer.numNodes)
@@ -121,20 +123,17 @@ class Network:
                     # calcolo nuova delta livello corrente
                     for j in range(0, hiddenLayer.numNodes):
                         derivative[j] = self.derivative(self.__activation_function, hiddenLayer.weightedSum[j])
+                        #sommatoria sul valore dei pesi dei nodi
                         for i in range(0, prevLayer.numNodes):
                             somma[j] += oldDelta[i] * prevLayer.weightMatrix[j][i]
                         delta[j] = derivative[j] + somma[j]
                     # aggiornamento pesi tra livello corrente e precedente
                         for i in range(0, prevLayer.numNodes):
-                            #oldweight = prevLayer.weightMatrix[j][i]
                             prevLayer.weightMatrix[j][i] += self.tasso_apprendimento_alfa * hiddenLayer.output[j] * oldDelta[i]
-                            #weightChange = abs(oldweight - prevLayer.weightMatrix[j][i])
-                            # print("weightchange: ",weightChange)
-                            # if (weightChange<self.epsilon):
-                            #     pesiInvariati = pesiInvariati+1
-                            # totalePesi = totalePesi + 1
-                        # aggiornamento pesi bias ?????
-                        #prevLayer.weightMatrix[hiddenLayer.numNodes][i] += self.tasso_apprendimento_alfa * (-1) * oldDelta[i]
+
+                    # aggiornamento pesi con bias dello strato hidden
+                    # for i in range(0, prevLayer.numNodes):
+                    #     prevLayer.weightMatrix[hiddenLayer.numNodes][i] += self.tasso_apprendimento_alfa * self.bias * oldDelta[i]
 
                     prevLayer = hiddenLayer
 
@@ -143,16 +142,11 @@ class Network:
                 oldDelta = delta
                 for j in range(0, self.input_size):
                     for i in range(0, prevLayer.numNodes):
-                        #oldweight = prevLayer.weightMatrix[j][i]
                         prevLayer.weightMatrix[j][i] += self.tasso_apprendimento_alfa * float(esempio[j]) * oldDelta[i]
-                        #weightChange = abs(oldweight - prevLayer.weightMatrix[j][i])
-                        # print("weightchange: ",weightChange)
-                        # if (weightChange<self.epsilon):
-                        #     pesiInvariati = pesiInvariati+1
-                        # totalePesi = totalePesi + 1
-                    # aggiornamento pesi bias ?????
-                    #prevLayer.weightMatrix[j + 1][i] += self.tasso_apprendimento_alfa * (-1) * oldDelta[i]
-            # REPEAT?? CHECK CONVERGENZA... io direi.. per ora limitiamoci a impostare un numero di epoche prefissato
+
+                #aggiornamento peso con bias nello strato di input
+                # for i in range(0, prevLayer.numNodes):
+                #     prevLayer.weightMatrix[self.input_size][i] += self.tasso_apprendimento_alfa * self.bias * oldDelta[i]
             repeat = repeat + 1
 
     @staticmethod

@@ -1,5 +1,5 @@
 __author__ = 'Nicola'
 
-from GiudiceSrc.Giudice import pippo
+from GiudiceSrc.Giudice import giudica
 
-pippo()
+giudica()

@@ -35,10 +35,10 @@ def neural_network(dataset_train, dataset_test):
     # Classificazione
     giuste = 0
     sbagliate = 0
-    lableElearning = list()
+    lable_learning = list()
     for test in dataset_test:
-        outputClass = rete.classify(test[:len(test)-1])
-        lableElearning.append(outputClass)
+        outputClass = rete.classify(test[:len(test)-1]) #passaggio dell'input alla rete
+        lable_learning.append(outputClass)
         if (outputClass==test[len(test)-1]):
             giuste += 1
             print("<",outputClass[0:len(outputClass)-1],",",test[len(test)-1],"> OK!!!")
@@ -54,7 +54,7 @@ def neural_network(dataset_train, dataset_test):
     print("giuste ", giuste)
     print("sbagliate ", sbagliate)
 #    print("accuracy ",float(giuste)/(giuste+sbagliate))
-    return lableElearning
+    return lable_learning
 #
 # reteXOR = Network(2, ['true'], funzioneSoglia)
 # reteXOR.addHiddenLayer(2)

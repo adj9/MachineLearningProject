@@ -7,7 +7,7 @@ import numpy as np
 from Dataset.DatasetReader import get_dataset
 from ANN.NeuralNetworkStarter import neural_network
 
-def pippo():
+def giudica():
     name_dataset = 'Fiori.csv'
 
     # Recupero il dataset
