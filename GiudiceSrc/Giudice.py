@@ -5,8 +5,7 @@ __author__ = 'Nicola'
 import numpy as np
 
 from Dataset.DatasetReader import get_dataset
-import Ann.NeuralNetworkStarter
-from Ann.NeuralNetworkStarter import neural_network
+from ANN.NeuralNetworkStarter import neural_network
 
 def pippo():
     name_dataset = 'Fiori.csv'

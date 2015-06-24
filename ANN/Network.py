@@ -1,5 +1,5 @@
 
-from Ann.Layer import Layer
+from ANN.Layer import Layer
 
 __author__ = 'Daniele'
 
