@@ -160,7 +160,7 @@ class Network:
                 # for i in range(0, prevLayer.numNodes):
                 #     prevLayer.weightMatrix[self.input_size][i] += self.tasso_apprendimento_alfa * self.bias * oldDelta[i]
             repeat = repeat + 1
-            s = str('epoca: ' + str(repeat) + '     errore tot: ' + str(erroreTot) + '\n')
+            s = str('epoca: ' + str(repeat) + '     errore tot: ' + str(erroreTot/len(out)) + '\n')
             self.report.write(s)
 
     @staticmethod
