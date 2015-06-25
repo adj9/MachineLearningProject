@@ -5,6 +5,8 @@ __author__ = 'Daniele'
 
 import numpy
 from numpy import zeros
+import math
+from math import pow
 
 
 class Network:
@@ -20,9 +22,13 @@ class Network:
         self.layers = []
         self.tasso_apprendimento_alfa = 0.1 # sparato a caso!!
         self.num_layers = 0
+        self.report = open("report.txt", 'w') #file di report apprendimento
         #self.bias = -1
         # activation_function = math.tanh  # funzione sigmoide
         self.__activation_function = activation_function
+
+    def closeReport(self):
+        self.report.close()
 
     def addHiddenLayer(self, numNodi):
         l = []
@@ -83,14 +89,14 @@ class Network:
                 max = networkOutput[i]
                 maxIndex = i
         outputClass = self.class_names[maxIndex]
-        print("netOutput: ", networkOutput, ", outputClass: ", outputClass)
+        #print("netOutput: ", networkOutput, ", outputClass: ", outputClass)
         return outputClass
 
     def train(self, trainSet):
         # l'input sarà nella forma [attr1,attr2,attr3,attr4,CLASSE] e dovrà diventare
         # [attr1, attr2, attr3, attr4, [0,0,1]] a seconda della classe
         repeat = 0
-
+        erroreTot = 0
         while (repeat < 1000):
 
             for esempio in trainSet:
@@ -99,6 +105,7 @@ class Network:
                 for i in range(0, len(self.class_names)):
                     if (inputClass == self.class_names[i]):
                         classVector[i] = 1  # ad esempio: classVector = [0,0,0,1,0]
+
                 # esempio[len(esempio)-1] = classVector
                 #
                 #  ALGORITMO DI BACK PROPAGATION COME SUL LIBRO
@@ -107,10 +114,15 @@ class Network:
                 delta = zeros(len(out))
                 derivative = zeros(len(out))
                 outputLayer = self.layers[len(self.layers) - 1]
+                errore = 0
                 for i in range(0, len(out)):
                     derivative[i] = self.derivative(self.__activation_function, outputLayer.weightedSum[i])
                     diff[i] = classVector[i] - out[i]
                     delta[i] = derivative[i] * diff[i]
+                    errore += pow(diff[i],2)
+                errore *= 0.5
+                erroreTot += errore
+
 
                 prevLayer = outputLayer
                 for l in range(len(self.layers) - 2, -1, -1): #For l = L-1 a 1
@@ -148,6 +160,8 @@ class Network:
                 # for i in range(0, prevLayer.numNodes):
                 #     prevLayer.weightMatrix[self.input_size][i] += self.tasso_apprendimento_alfa * self.bias * oldDelta[i]
             repeat = repeat + 1
+            s = str('epoca: ' + str(repeat) + '     errore tot: ' + str(erroreTot) + '\n')
+            self.report.write(s)
 
     @staticmethod
     def derivative(f, x):

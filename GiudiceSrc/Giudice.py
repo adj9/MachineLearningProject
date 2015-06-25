@@ -49,6 +49,7 @@ def giudica():
         accuracy.append(check_accuracy(ris, dataset_test))
 
     print('Media:', round(np.average(accuracy), 3) * 100, '%')
+
     exit()
 
 # Funzione che "giudica" la classificazione piu probabile

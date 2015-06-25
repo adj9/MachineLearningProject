@@ -53,7 +53,8 @@ def neural_network(dataset_train, dataset_test):
 
     print("giuste ", giuste)
     print("sbagliate ", sbagliate)
-#    print("accuracy ",float(giuste)/(giuste+sbagliate))
+#   print("accuracy ",float(giuste)/(giuste+sbagliate))
+    rete.closeReport()
     return lable_learning
 #
 # reteXOR = Network(2, ['true'], funzioneSoglia)
