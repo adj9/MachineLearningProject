@@ -1,4 +1,5 @@
 import copy
+import os
 
 __author__ = 'Nicola'
 
@@ -9,6 +10,11 @@ from ANN.NeuralNetworkStarter import neural_network
 
 def giudica():
     name_dataset = 'Fiori.csv'
+
+    try:
+        os.remove("report.txt")
+    except OSError:
+        pass
 
     # Recupero il dataset
     dataset = get_dataset(name_dataset)

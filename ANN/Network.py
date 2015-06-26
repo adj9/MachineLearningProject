@@ -3,11 +3,9 @@ from ANN.Layer import Layer
 
 __author__ = 'Daniele'
 
-import numpy
 from numpy import zeros
-import math
 from math import pow
-
+import os
 
 class Network:
     # def funzioneSoglia(self,x):
@@ -22,7 +20,7 @@ class Network:
         self.layers = []
         self.tasso_apprendimento_alfa = 0.1 # sparato a caso!!
         self.num_layers = 0
-        self.report = open("report.txt", 'w') #file di report apprendimento
+        self.report = open("report.txt", 'a') #file di report apprendimento
         #self.bias = -1
         # activation_function = math.tanh  # funzione sigmoide
         self.__activation_function = activation_function
@@ -96,8 +94,11 @@ class Network:
         # l'input sarà nella forma [attr1,attr2,attr3,attr4,CLASSE] e dovrà diventare
         # [attr1, attr2, attr3, attr4, [0,0,1]] a seconda della classe
         repeat = 0
-        erroreTot = 0
+
+        self.report.write('\n-----------------------------------------------------------------------------------------------\n\n')
         while (repeat < 1000):
+
+            erroreTot = 0
 
             for esempio in trainSet:
                 inputClass = esempio[len(esempio) - 1]
@@ -122,7 +123,6 @@ class Network:
                     errore += pow(diff[i],2)
                 errore *= 0.5
                 erroreTot += errore
-
 
                 prevLayer = outputLayer
                 for l in range(len(self.layers) - 2, -1, -1): #For l = L-1 a 1
