@@ -4,6 +4,9 @@ import os
 __author__ = 'Nicola'
 
 import numpy as np
+import CandidateElimination.candidate_elimination as ce
+import BayesianClassifier.NaiveBayes as nb
+import ID3.DecisionTree as dt
 
 from Dataset.DatasetReader import get_dataset
 from ANN.NeuralNetworkStarter import neural_network
@@ -45,12 +48,13 @@ def giudica():
         for z in range(len(temp_data)):
             dataset_train += temp_data[z]
 
-        # output_naive_bayes = nb.naive_bayes(dataset_train, dataset_test)
+        output_naive_bayes = nb.naive_bayes(dataset_train, dataset_test)
         # TODO: AGGIUNGERE CHIAMATA AGLI ALTRI ALGORITMI
-        # output_candidate_elimination = ce.candidate(dataset_train, dataset_test)
+        #output_candidate_elimination = ce.candidate(dataset_train, dataset_test)
         output_nn = neural_network(dataset_train, dataset_test)
+        output_id3 = dt.blackBoxID3(copy.deepcopy(dataset_train), copy.deepcopy(dataset_test))
         # TODO: MODIFICARE VARIABILI DA PASSARE ALLA FUNZIONE GET_CLASSIFICAZIONE
-        ris = get_classificazione(output_nn, output_nn, output_nn, output_nn)
+        ris = get_classificazione(output_naive_bayes, output_id3, output_naive_bayes, output_nn)
 
         accuracy.append(check_accuracy(ris, dataset_test))
 
