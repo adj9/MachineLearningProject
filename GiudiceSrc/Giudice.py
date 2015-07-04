@@ -11,6 +11,7 @@ import ID3.DecisionTree as dt
 from Dataset.DatasetReader import get_dataset
 from ANN.NeuralNetworkStarter import neural_network
 
+
 def giudica():
     name_dataset = 'Fiori.csv'
 
@@ -41,9 +42,12 @@ def giudica():
     # K-Fold Cross Validation
     #
     accuracy = list()
+    accuracy_bayes = list()
+    accuracy_nn = list()
+    accuracy_id3 = list()
     for i in range(k):
         dataset_train = list()
-        temp_data = copy.deepcopy(part_dataset)  #copia completa
+        temp_data = copy.deepcopy(part_dataset)  # copia completa
         dataset_test = temp_data.pop(i)
 
         for z in range(len(temp_data)):
@@ -59,13 +63,18 @@ def giudica():
         ris = get_classificazione(output_naive_bayes, output_id3, output_nn)
 
         accuracy.append(check_accuracy(ris, dataset_test))
+        accuracy_bayes.append(check_accuracy(output_naive_bayes, dataset_test))
+        accuracy_nn.append(check_accuracy(output_nn, dataset_test))
+        accuracy_id3.append(check_accuracy(output_id3, dataset_test))
 
-    print('Media:', round(np.average(accuracy), 3) * 100, '%')
+    print('Media Naive Bayes:', round(np.average(accuracy_bayes), 3) * 100, '%')
+    print('Media Neural Network:', round(np.average(accuracy_nn), 3) * 100, '%')
+    print('Media ID3:', round(np.average(accuracy_id3), 3) * 100, '%')
+    print('Media totale:', round(np.average(accuracy), 3) * 100, '%')
 
-    exit()
 
 # Funzione che "giudica" la classificazione piu probabile
-def get_classificazione(naive_bayes, id3, candidate_elimination, neural_network):
+def get_classificazione(naive_bayes, id3, neural_network):
     classificazione = list()
     for i in range(len(naive_bayes)):
         num_setosa = 0
@@ -76,8 +85,8 @@ def get_classificazione(naive_bayes, id3, candidate_elimination, neural_network)
                                                                           num_virginica)
         num_setosa, num_versicolor, num_virginica = incrementa_occorrenze(id3[i], num_setosa, num_versicolor,
                                                                           num_virginica)
-        num_setosa, num_versicolor, num_virginica = incrementa_occorrenze(candidate_elimination[i], num_setosa,
-                                                                          num_versicolor, num_virginica)
+        # num_setosa, num_versicolor, num_virginica = incrementa_occorrenze(candidate_elimination[i], num_setosa,
+        #                                                                  num_versicolor, num_virginica)
         num_setosa, num_versicolor, num_virginica = incrementa_occorrenze(neural_network[i], num_setosa, num_versicolor,
                                                                           num_virginica)
 
@@ -97,6 +106,7 @@ def incrementa_occorrenze(dataset, num_setosa, num_versicolor, num_virginica):
         num_virginica += 1
 
     return num_setosa, num_versicolor, num_virginica
+
 
 def check_accuracy(ris, data_test):
     x = list(zip(*data_test))[-1]
