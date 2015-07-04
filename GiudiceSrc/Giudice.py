@@ -4,7 +4,7 @@ import os
 __author__ = 'Nicola'
 
 import numpy as np
-import CandidateElimination.candidate_elimination as ce
+import CandidateElimination.CandidateElimination as ce
 import BayesianClassifier.NaiveBayes as nb
 import ID3.DecisionTree as dt
 
@@ -16,6 +16,7 @@ def giudica():
 
     try:
         os.remove("report.txt")
+        os.remove("reportCandidateElimination.txt")
     except OSError:
         pass
 
@@ -49,12 +50,13 @@ def giudica():
             dataset_train += temp_data[z]
 
         output_naive_bayes = nb.naive_bayes(dataset_train, dataset_test)
-        # TODO: AGGIUNGERE CHIAMATA AGLI ALTRI ALGORITMI
-        #output_candidate_elimination = ce.candidate(dataset_train, dataset_test)
         output_nn = neural_network(dataset_train, dataset_test)
         output_id3 = dt.blackBoxID3(copy.deepcopy(dataset_train), copy.deepcopy(dataset_test))
-        # TODO: MODIFICARE VARIABILI DA PASSARE ALLA FUNZIONE GET_CLASSIFICAZIONE
-        ris = get_classificazione(output_naive_bayes, output_id3, output_naive_bayes, output_nn)
+
+        # Candidate elimination
+        ce.candidate(dataset_train, dataset_test)
+
+        ris = get_classificazione(output_naive_bayes, output_id3, output_nn)
 
         accuracy.append(check_accuracy(ris, dataset_test))
 
@@ -122,5 +124,5 @@ def get_label(position):
         return "Iris-virginica"
 
 
-#if __name__ == "__main__":
-#    pippo()
+if __name__ == "__main__":
+    giudica()

@@ -15,13 +15,18 @@ class Candidate_elimination:
     Positive = {}
     Negative = {}
 
-    def __init__(self, data, fact):
+    def __init__(self, data, fact, target):
         self.num_factors = len(data[0][0])
         self.factors = fact.factors
         self.attr = fact.attributes
         self.dataset = data
+        self.target = target
+        self.report = open("reportCandidateElimination.txt", 'a')
 
     def run_algo(self):
+        self.report.write('###########################################################################################\n')
+        self.report.write('Target: ' + self.target + '\n')
+        self.report.write('###########################################################################################\n')
         G = self.initializeG()
         S = self.initializeS()
         for example in self.dataset:
@@ -44,13 +49,19 @@ class Candidate_elimination:
                     if self.consistent(g, example[0]):
                         G_new.remove(g)
                         specializations = self.specialize_inconsistent_G(g, example[0])
-                        specializationss = self.get_specific(specializations, S)
+                        specializations = self.get_specific(specializations, S)
                         if specializations != []:
                             G_new += specializations
                     G = G_new[:]
                     G = self.remove_more_specific(G)
-        print(S)
-        print(G)
+
+            self.report.write('Esempio: ' + str(example) + '\n')
+            self.report.write('S: ' + str(S) + '\n')
+            self.report.write('G: ' + str(G) + '\n')
+            self.report.write('\n')
+
+        self.report.write('###########################################################################################\n')
+        # return [S, G]
 
     def initializeS(self):
         ''' Initialize the specific boundary '''
@@ -64,21 +75,21 @@ class Candidate_elimination:
 
     def is_positive(self, example):
         ''' Check if a given training example is positive '''
-        if example[1] == 'Y':
+        if example[1] == self.target:
             return True
-        elif example[1] == 'N':
-            return False
         else:
-            raise TypeError("invalid target value")
+            return False
+        # else:
+        #     raise TypeError("invalid target value")
 
     def is_negative(self, example):
         ''' Check if a given training example is negative '''
-        if example[1] == 'N':
+        if example[1] != self.target:
             return False
-        elif example[1] == 'Y':
-            return True
         else:
-            raise TypeError("invalid target value")
+            return True
+        # else:
+        #     raise TypeError("invalid target value")
 
     def match_factor(self, value1, value2):
         ''' Check for the factors values match,
@@ -122,7 +133,7 @@ class Candidate_elimination:
         for old in hypotheses:
             for new in S_new:
                 if old != new and self.more_general(new, old):
-                    S_new.remove[new]
+                    S_new.remove(new)
         return S_new
 
     def remove_more_specific(self, hypotheses):
@@ -132,7 +143,7 @@ class Candidate_elimination:
         for old in hypotheses:
             for new in G_new:
                 if old != new and self.more_specific(new, old):
-                    G_new.remove[new]
+                    G_new.remove(new)
         return G_new
 
     def generalize_inconsistent_S(self, hypothesis, instance):
@@ -273,54 +284,40 @@ def count_bin(dataset, position):
 
     return new_dataset
 
+def modifica_dataset(dataset):
 
-# Conta il numero di occorrenze dei target nel training-set
+    new_dataset = list()
+    new_list = [0, 0]
 
-def increase_bin(target_train, bin_x, i):
-    if target_train == "Iris-setosa":
-        bin_x[i][0] += 1
-    elif target_train == "Iris-versicolor":
-        bin_x[i][1] += 1
-    else:
-        bin_x[i][2] += 1
+    for i in dataset:
+        new_list[0] = (i[0], i[1], i[2], i[3])
+        new_list[1] = i[4]
+        new_dataset.append(new_list)
+        new_list = [0, 0]
 
-    return bin_x
-
-
-def trova_bin(dataset_train, position, attributo):
-    x = list(zip(*dataset_train))[position]
-    x = [float(i) for i in x]
-    min_x = min(x)
-    max_x = max(x)
-    grandezza_bin = (max_x - min_x) / num_bin
-
-    for i in range(len(dataset_train)):
-        start_bin = min_x
-        for j in range(1, num_bin + 1):
-            end_bin = min_x + grandezza_bin * j
-
-            if (j < num_bin) & (float(attributo) >= start_bin) & (float(attributo) < end_bin):
-                return j - 1
-            elif (float(attributo) >= start_bin) & (float(attributo) <= end_bin):
-                return j - 1
-
-            start_bin = end_bin
-
-    return None
-
+    return new_dataset
 
 def candidate(dataset_train, dataset_test):
     for i in range(0, 4):
         dataset_train = count_bin(dataset_train, i)
-    print(dataset_train)
+    # print(dataset_train)
     attributes = ('x1', 'x2', 'x3', 'x4')
     f = Factors(attributes)
     f.add_values('x1', ('bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8', 'bin9', 'bin10'))
     f.add_values('x2', ('bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8', 'bin9', 'bin10'))
     f.add_values('x3', ('bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8', 'bin9', 'bin10'))
     f.add_values('x4', ('bin1', 'bin2', 'bin3', 'bin4', 'bin5', 'bin6', 'bin7', 'bin8', 'bin9', 'bin10'))
-    # a = Candidate_elimination(dataset,f)
-    # a.run_algo()
+
+    # Settiamo il nuovo dataset
+    dataset = modifica_dataset(dataset_train)
+
+    # Richiamo tre volte il candidate elimination passandogli i tre diversi valori di target
+    a = Candidate_elimination(dataset, f, "Iris-setosa")
+    a.run_algo()
+    b = Candidate_elimination(dataset, f, "Iris-versicolor")
+    b.run_algo()
+    c = Candidate_elimination(dataset, f, "Iris-virginica")
+    c.run_algo()
 
 #
 # dataset=[[('sunny','warm','normal','strong','warm','same'),'Y'],[('sunny','warm','high','strong','warm','same'),'Y'],[('rainy','cold','high','strong','warm','change'),'N'],[('sunny','warm','high','strong','cool','change'),'Y']]

@@ -41,18 +41,18 @@ def neural_network(dataset_train, dataset_test):
         lable_learning.append(outputClass)
         if (outputClass==test[len(test)-1]):
             giuste += 1
-            print("<",outputClass[0:len(outputClass)-1],",",test[len(test)-1],"> OK!!!")
+            # print("<",outputClass[0:len(outputClass)-1],",",test[len(test)-1],"> OK!!!")
         else:
             sbagliate +=1
-            print("<",outputClass[0:len(outputClass)-1],",",test[len(test)-1],"> SBAGLIATO!")
+            # print("<",outputClass[0:len(outputClass)-1],",",test[len(test)-1],"> SBAGLIATO!")
 
 
     # Stampa della matrici parziale
-    for lay in rete.layers:
-        print(lay.weightMatrix)
+    # for lay in rete.layers:
+        # print(lay.weightMatrix)
 
-    print("giuste ", giuste)
-    print("sbagliate ", sbagliate)
+    # print("giuste ", giuste)
+    # print("sbagliate ", sbagliate)
 #   print("accuracy ",float(giuste)/(giuste+sbagliate))
     rete.closeReport()
     return lable_learning
