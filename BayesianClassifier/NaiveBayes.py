@@ -34,11 +34,7 @@ def calcolaProbPriori(dataset):
     numVerginica = 0
     # esiste = []
     for i in range(len(ultimaColonna)):
-        '''if ultimaColonna[i] in esiste:
 
-            esiste[ultimaColonna[i]] = esiste[ultimaColonna[i]]+1
-        else:
-            esiste.append((ultimaColonna[i], 1))'''
         if ultimaColonna[i] == "Iris-setosa":
             numSetosa = numSetosa + 1
 

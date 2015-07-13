@@ -1,10 +1,8 @@
-import copy
-import os
-
 __author__ = 'Nicola'
 
+import copy
+import os
 import numpy as np
-import CandidateElimination.CandidateElimination as ce
 import BayesianClassifier.NaiveBayes as nb
 import ID3.DecisionTree as dt
 
@@ -17,7 +15,6 @@ def giudica():
 
     try:
         os.remove("report.txt")
-        os.remove("reportCandidateElimination.txt")
     except OSError:
         pass
 
@@ -57,9 +54,6 @@ def giudica():
         output_nn = neural_network(dataset_train, dataset_test)
         output_id3 = dt.blackBoxID3(copy.deepcopy(dataset_train), copy.deepcopy(dataset_test))
 
-        # Candidate elimination
-        ce.candidate(dataset_train, dataset_test)
-
         ris = get_classificazione(output_naive_bayes, output_id3, output_nn)
 
         accuracy.append(check_accuracy(ris, dataset_test))
@@ -85,8 +79,6 @@ def get_classificazione(naive_bayes, id3, neural_network):
                                                                           num_virginica)
         num_setosa, num_versicolor, num_virginica = incrementa_occorrenze(id3[i], num_setosa, num_versicolor,
                                                                           num_virginica)
-        # num_setosa, num_versicolor, num_virginica = incrementa_occorrenze(candidate_elimination[i], num_setosa,
-        #                                                                  num_versicolor, num_virginica)
         num_setosa, num_versicolor, num_virginica = incrementa_occorrenze(neural_network[i], num_setosa, num_versicolor,
                                                                           num_virginica)
 
