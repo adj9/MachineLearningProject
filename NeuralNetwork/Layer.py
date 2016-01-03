@@ -1,32 +1,27 @@
+import random
+
+__author__ = 'Daniele'
+
+
 class Layer:
-    # dal secondo layer in poi gli inputs sono i value dei previous
-    "Layer of network"
-    def __init__(self, inputs):
+    def __init__(self, tmpNumNodes, tmpNumInputs, activationFun):
         super(Layer, self).__init__()
-        self.__units = []
-        self.__inputs = inputs
-        self.__matrix = []
+        self.numNodes = tmpNumNodes
+        self.numInputs = tmpNumInputs
+        self.output = [0] * self.numNodes
+        self.weightedSum = [0] * self.numNodes
+        self.weightMatrix = []
+        self.activationFun = activationFun
+        for i in range(0, self.numInputs):  # +1):
+            self.weightMatrix.append([])
+            for j in range(0, self.numNodes):
+                self.weightMatrix[i].append(random.random() / 2 - 0.25)
 
-    def set_units(self, units):
-        self.__units.append(units)
+    def calculateOutput(self, input):
+        for j in range(0, self.numNodes):
+            somma = [0] * self.numNodes
+            for i in range(0, self.numInputs):
+                somma[j] += self.weightMatrix[i][j] * float(input[i])
+            self.weightedSum[j] = somma[j]  # - self.weightMatrix[i+1][j] # sostanzialmente viene tolto il bias
 
-    def get_unit(self, index):
-        return self.__units[index]
-
-    def get_weights_in(self, index):
-        result = []
-        for i in range (0, len(self.__inputs)):
-            result.append(self.__inputs[i].get_index_weight(index))
-
-        return result
-
-    def generate_matrix(self):
-        #if self.__units == 0:
-            for i in range(0, len(self.__inputs)-1):
-                self.__matrix.append(self.__inputs[i].get_weights())
-        # else:
-        #     for i in range(0, len(self.__units)):
-        #         self.__matrix[i] = [self.__units[i].get_weight_out()]
-
-    def get_matrix(self):
-        return self.__matrix
+            self.output[j] = self.activationFun(self.weightedSum[j])

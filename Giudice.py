@@ -1,4 +1,4 @@
-__author__ = 'Nicola'
+__author__ = 'nzarrilli'
 
 import copy
 import os
@@ -7,7 +7,7 @@ import BayesianClassifier.NaiveBayes as nb
 import ID3.DecisionTree as dt
 
 from Dataset.DatasetReader import get_dataset
-from ANN.NeuralNetworkStarter import neural_network
+from NeuralNetwork.NeuralNetworkStarter import neural_network
 
 
 def giudica():

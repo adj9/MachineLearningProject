@@ -2,7 +2,7 @@ import copy
 
 __author__ = 'Daniele'
 
-from ANN.Network import *
+from NeuralNetwork.Network import *
 import numpy as np
 import Dataset.DatasetReader as data
 import math
