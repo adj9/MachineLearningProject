@@ -1,5 +1,3 @@
-__author__ = 'nzarrilli'
-
 import os
 import csv
 
@@ -15,4 +13,3 @@ def get_dataset(dataset_name):
             dataset.append(row)
 
     return dataset
-

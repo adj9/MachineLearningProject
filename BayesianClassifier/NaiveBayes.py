@@ -1,18 +1,16 @@
-__author__ = 'antoniograndinetti'
+import numpy as np
 
 num_bin = 10
-
-import numpy as np
 
 
 def naive_bayes(data_train, data_test):
     prob_cond_x = [0, 0, 0, 0]
 
     # Calcolo la probabilità a priori del training-set
-    prob_priori = calcolaProbPriori(data_train)
+    prob_priori = calcola_prob_priori(data_train)
 
     # Calcolo la probabilità condizionata
-    for i in range(len(data_test[0])-1):
+    for i in range(len(data_test[0]) - 1):
         prob_cond_x[i] = calcola_prob_condizionata(data_train, i)
 
     classificazione = list(np.ones(len(data_test)))
@@ -20,41 +18,36 @@ def naive_bayes(data_train, data_test):
     for j in range(len(data_test)):
         classificazione[j] = classificatore(data_train, data_test[j], prob_priori, prob_cond_x)
 
-    #return calcola_accuratezza(classificazione, data_test)
-
     return classificazione
 
+
 # Calcolo le probabilità a priori
+def calcola_prob_priori(dataset):
+    ultima_colonna = list(zip(*dataset))[-1]
 
-def calcolaProbPriori(dataset):
-    ultimaColonna = list(zip(*dataset))[-1]
+    num_setosa = 0
+    num_versicolor = 0
+    num_verginica = 0
 
-    numSetosa = 0
-    numVersicolor = 0
-    numVerginica = 0
-    # esiste = []
-    for i in range(len(ultimaColonna)):
+    for i in range(len(ultima_colonna)):
 
-        if ultimaColonna[i] == "Iris-setosa":
-            numSetosa = numSetosa + 1
+        if ultima_colonna[i] == "Iris-setosa":
+            num_setosa += 1
 
-        elif ultimaColonna[i] == "Iris-versicolor":
-            numVersicolor = numVersicolor + 1
+        elif ultima_colonna[i] == "Iris-versicolor":
+            num_versicolor += 1
 
         else:
-            numVerginica = numVerginica + 1
+            num_verginica += 1
 
-    probSetosa = numSetosa / len(ultimaColonna)
-    probVersicolor = numVersicolor / len(ultimaColonna)
-    probVerginica = numVerginica / len(ultimaColonna)
+    prob_setosa = num_setosa / len(ultima_colonna)
+    prob_versicolor = num_versicolor / len(ultima_colonna)
+    prob_verginica = num_verginica / len(ultima_colonna)
 
+    return [prob_setosa, prob_versicolor, prob_verginica]
 
-    # print(ultimaColonna.count("Iris-setosa"))
-
-    return [probSetosa, probVersicolor, probVerginica]
 
 # Calcolo le probabilità condizionate
-
 def calcola_prob_condizionata(dataset, position):
     bin_x = count_bin(dataset, position)
     prob_cond_x = []
@@ -72,7 +65,6 @@ def calcola_prob_condizionata(dataset, position):
 
     return prob_cond_x
 
-#
 
 def count_bin(dataset, position):
     bin_x = []
@@ -86,7 +78,7 @@ def count_bin(dataset, position):
     max_x = max(x)
     grandezza_bin = (max_x - min_x) / num_bin
 
-    size_data = len(dataset[0])-1
+    size_data = len(dataset[0]) - 1
 
     for i in range(len(dataset)):
         start_bin = min_x
@@ -102,8 +94,8 @@ def count_bin(dataset, position):
 
     return bin_x
 
-# Conta il numero di occorrenze dei target nel training-set
 
+# Conta il numero di occorrenze dei target nel training-set
 def increase_bin(target_train, bin_x, i):
     if target_train == "Iris-setosa":
         bin_x[i][0] += 1
@@ -117,7 +109,6 @@ def increase_bin(target_train, bin_x, i):
 
 # Trova in quale BIN si trova l'attributo dell'istanza in classificazione
 # Restituisce l'indice del BIN in cui si trova l'attributo, altrimenti None
-
 def trova_bin(dataset_train, position, attributo):
     x = list(zip(*dataset_train))[position]
     x = [float(i) for i in x]
@@ -141,11 +132,10 @@ def trova_bin(dataset_train, position, attributo):
 
 
 # Classifica l'attributo x
-
 def classificatore(dataset_train, attributo, prob_priori, prob_condizionate):
     indice = list()
     # numero di attributi nel dataset
-    size_data = len(dataset_train[0])-1
+    size_data = len(dataset_train[0]) - 1
 
     for x in range(size_data):
         indice.append(0)
@@ -169,13 +159,14 @@ def classificatore(dataset_train, attributo, prob_priori, prob_condizionate):
     prob_virginica = round(prob_priori[2] * prob_post_virginica, 3)
 
     # Lista delle probabilità a posteriori del singolo attributo
-    listaProb = [prob_setosa, prob_versicolor, prob_virginica]
+    lista_prob = [prob_setosa, prob_versicolor, prob_virginica]
 
     # Restituisco il Max delle probabilità a posteriori dell'attributo ed il suo indice
-    # return max(listaProb), get_label(listaProb.index(max(listaProb)))
+    # return max(lista_prob), get_label(lista_prob.index(max(lista_prob)))
 
     # Restituisce l'etichetta con la probabilità massima
-    return get_label(listaProb.index(max(listaProb)))
+    return get_label(lista_prob.index(max(lista_prob)))
+
 
 # Restituisce l'etichetta
 def get_label(position):
@@ -186,10 +177,9 @@ def get_label(position):
     else:
         return "Iris-virginica"
 
+
 # Calcolo l'accuratezza
-
 def calcola_accuratezza(classificazione, data_test):
-
     x = list(zip(*data_test))[-1]
     classe = np.ones(len(x))
     for i in range(len(x)):
@@ -204,12 +194,11 @@ def calcola_accuratezza(classificazione, data_test):
     fp = 0
 
     for i in range(len(classe)):
-       if classificazione[i][1] == classe[i]:
-           tp += 1
-       else:
-           fp += 1
+        if classificazione[i][1] == classe[i]:
+            tp += 1
+        else:
+            fp += 1
 
-    accurancy = tp  / len(data_test)
-    #print('Accurancy', tp, '/', len(data_test))
+    accurancy = tp / len(data_test)
 
     return accurancy

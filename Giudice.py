@@ -1,11 +1,10 @@
-__author__ = 'nzarrilli'
-
 import copy
 import os
+
 import numpy as np
+
 import BayesianClassifier.NaiveBayes as nb
 import ID3.DecisionTree as dt
-
 from Dataset.DatasetReader import get_dataset
 from NeuralNetwork.NeuralNetworkStarter import neural_network
 
@@ -35,16 +34,14 @@ def giudica():
         part_dataset[x] = dataset[j:j + size_dataset]
         j += size_dataset
 
-    #
     # K-Fold Cross Validation
-    #
     accuracy = list()
     accuracy_bayes = list()
     accuracy_nn = list()
     accuracy_id3 = list()
     for i in range(k):
         dataset_train = list()
-        temp_data = copy.deepcopy(part_dataset)  # copia completa
+        temp_data = copy.deepcopy(part_dataset)  # Copia completa
         dataset_test = temp_data.pop(i)
 
         for z in range(len(temp_data)):
@@ -52,7 +49,7 @@ def giudica():
 
         output_naive_bayes = nb.naive_bayes(dataset_train, dataset_test)
         output_nn = neural_network(dataset_train, dataset_test)
-        output_id3 = dt.blackBoxID3(copy.deepcopy(dataset_train), copy.deepcopy(dataset_test))
+        output_id3 = dt.black_box_id3(copy.deepcopy(dataset_train), copy.deepcopy(dataset_test))
 
         ris = get_classificazione(output_naive_bayes, output_id3, output_nn)
 

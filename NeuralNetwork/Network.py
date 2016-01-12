@@ -1,168 +1,133 @@
-from NeuralNetwork.Layer import Layer
-
-__author__ = 'Daniele'
+from math import pow
 
 from numpy import zeros
-from math import pow
-import os
+
+from NeuralNetwork.Layer import Layer
 
 
 class Network:
-    # def funzioneSoglia(self,x):
-    #     if(x>=0):
-    #         return 1
-    #     else:
-    #         return 0
     def __init__(self, input_size, class_names, activation_function):
         super(Network, self).__init__()
         self.input_size = input_size
         self.class_names = class_names  # class_names sarà = ["Iris-setosa\n", "Iris-virginica\n", "Iris-versicolor\n"]
         self.layers = []
-        self.tasso_apprendimento_alfa = 0.1  # sparato a caso!!
+        self.tasso_apprendimento_alfa = 0.1
         self.num_layers = 0
         self.report = open("report.txt", 'a')  # file di report apprendimento
-        # self.bias = -1
-        # activation_function = math.tanh  # funzione sigmoide
-        self.__activation_function = activation_function
+        self.activation_function = activation_function
 
-    def closeReport(self):
+    def close_report(self):
         self.report.close()
 
-    def addHiddenLayer(self, numNodi):
-        l = []
+    def add_hidden_layer(self, num_nodi):
         if self.num_layers == 0:
-            l = Layer(numNodi, self.input_size, self.__activation_function)
+            l = Layer(num_nodi, self.input_size, self.activation_function)
             self.layers.append(l)
         else:
-            prevLayer = self.layers[len(self.layers) - 1]
-            assert isinstance(prevLayer, Layer)  # verifica che prevLayer sia un Layer
-            nodiPrecLayer = prevLayer.numNodes
-            self.layers.append(Layer(numNodi, nodiPrecLayer, self.__activation_function))
+            prev_layer = self.layers[len(self.layers) - 1]
+            assert isinstance(prev_layer, Layer)  # verifica che prev_layer sia un Layer
+            nodi_prec_layer = prev_layer.numNodes
+            self.layers.append(Layer(num_nodi, nodi_prec_layer, self.activation_function))
         self.num_layers += 1
 
-        # !!!!!!!!!!!!!!!!!
-        # !!!!!!!!!!!!!!
-        # !!!!!!!!!!
-        # self.activation_function = self.funzioneSoglia
-
-    def addOutputLayer(self):
-        prevLayer = self.layers[len(self.layers) - 1]
-        assert isinstance(prevLayer, Layer)
-        nodiPrecLayer = prevLayer.numNodes
-        self.layers.append(Layer(len(self.class_names), nodiPrecLayer, self.__activation_function))
+    def add_output_layer(self):
+        prev_layer = self.layers[len(self.layers) - 1]
+        assert isinstance(prev_layer, Layer)
+        nodi_prec_layer = prev_layer.numNodes
+        self.layers.append(Layer(len(self.class_names), nodi_prec_layer, self.activation_function))
 
         self.num_layers += 1
 
-    def calculateOutput(self, input):
-        outputPrevLayer = 0
+    def calculate_output(self, input):
+        output_prev_layer = 0
         for i in range(0, self.num_layers):
-            if i == 0:  # al primo layer passiamo direttamente l'input, anziché l'output del layer precedente
-                self.layers[i].calculateOutput(input)
-                outputPrevLayer = self.layers[i].output
+            if i == 0:  # Al primo layer passiamo direttamente l'input, anziché l'output del layer precedente
+                self.layers[i].calculate_output(input)
+                output_prev_layer = self.layers[i].output
             else:
-                self.layers[i].calculateOutput(outputPrevLayer)
-                outputPrevLayer = self.layers[i].output
-        # max = 0
-        # maxIndex = 0
-        # for i in range(0, len(outputPrevLayer)):
-        #     if (outputPrevLayer[i]>max):
-        #         max = outputPrevLayer[i]
-        #         maxIndex = i
-        # for i in range(0, len(outputPrevLayer)):
-        #     if (i==maxIndex):
-        #         outputPrevLayer[i] = 1.0
-        #     else:
-        #         outputPrevLayer[i] = 0.0
-        return outputPrevLayer
+                self.layers[i].calculate_output(output_prev_layer)
+                output_prev_layer = self.layers[i].output
+
+        return output_prev_layer
 
     def classify(self, input):
 
-        networkOutput = self.calculateOutput(input)
+        network_output = self.calculate_output(input)
 
-        # l'output di calculateOutput sarà tipo [0.41, 0.98, 0.61] e andrà trasformato in Virginica/Setosa/Versicolor
+        # L'output di calculateOutput sarà tipo [0.41, 0.98, 0.61] e andrà trasformato in Virginica/Setosa/Versicolor
         max = 0
-        maxIndex = 0
+        max_index = 0
         for i in range(0, len(self.class_names)):
-            if (networkOutput[i] > max):
-                max = networkOutput[i]
-                maxIndex = i
-        outputClass = self.class_names[maxIndex]
-        # print("netOutput: ", networkOutput, ", outputClass: ", outputClass)
-        return outputClass
+            if network_output[i] > max:
+                max = network_output[i]
+                max_index = i
+        output_class = self.class_names[max_index]
 
-    def train(self, trainSet):
-        # l'input sarà nella forma [attr1,attr2,attr3,attr4,CLASSE] e dovrà diventare
+        return output_class
+
+    def train(self, train_set):
+        # L'input sarà nella forma [attr1,attr2,attr3,attr4,CLASSE] e dovrà diventare
         # [attr1, attr2, attr3, attr4, [0,0,1]] a seconda della classe
         repeat = 0
 
         self.report.write(
-            '\n-----------------------------------------------------------------------------------------------\n\n')
+                '\n-----------------------------------------------------------------------------------------------\n\n')
         while (repeat < 1000):
 
-            erroreTot = 0
+            errore_tot = 0
 
-            for esempio in trainSet:
-                inputClass = esempio[len(esempio) - 1]
-                classVector = [0] * len(self.class_names)  # classVector = [0,0,0,0,0]
+            for esempio in train_set:
+                input_class = esempio[len(esempio) - 1]
+                class_vector = [0] * len(self.class_names)
                 for i in range(0, len(self.class_names)):
-                    if (inputClass == self.class_names[i]):
-                        classVector[i] = 1  # ad esempio: classVector = [0,0,0,1,0]
+                    if input_class == self.class_names[i]:
+                        class_vector[i] = 1
 
-                # esempio[len(esempio)-1] = classVector
-                #
-                #  ALGORITMO DI BACK PROPAGATION COME SUL LIBRO
-                out = self.calculateOutput(esempio[0:len(esempio) - 1])
+                out = self.calculate_output(esempio[0:len(esempio) - 1])
                 diff = zeros(len(out))
                 delta = zeros(len(out))
                 derivative = zeros(len(out))
-                outputLayer = self.layers[len(self.layers) - 1]
+                output_layer = self.layers[len(self.layers) - 1]
                 errore = 0
                 for i in range(0, len(out)):
-                    derivative[i] = self.derivative(self.__activation_function, outputLayer.weightedSum[i])
-                    diff[i] = classVector[i] - out[i]
+                    derivative[i] = self.derivative(self.activation_function, output_layer.weightedSum[i])
+                    diff[i] = class_vector[i] - out[i]
                     delta[i] = derivative[i] * diff[i]
                     errore += pow(diff[i], 2)
                 errore *= 0.5
-                erroreTot += errore
+                errore_tot += errore
 
-                prevLayer = outputLayer
+                prev_layer = output_layer
                 for l in range(len(self.layers) - 2, -1, -1):  # For l = L-1 a 1
-                    # inizializzazione dei dati per la back-propagation
-                    hiddenLayer = self.layers[l]
-                    oldDelta = delta
-                    somma = zeros(hiddenLayer.numNodes)
-                    delta = zeros(hiddenLayer.numNodes)
-                    derivative = zeros(hiddenLayer.numNodes)
-                    # calcolo nuova delta livello corrente
-                    for j in range(0, hiddenLayer.numNodes):
-                        derivative[j] = self.derivative(self.__activation_function, hiddenLayer.weightedSum[j])
-                        # sommatoria sul valore dei pesi dei nodi
-                        for i in range(0, prevLayer.numNodes):
-                            somma[j] += oldDelta[i] * prevLayer.weightMatrix[j][i]
+                    # Inizializzazione dei dati per la back-propagation
+                    hidden_layer = self.layers[l]
+                    old_delta = delta
+                    somma = zeros(hidden_layer.numNodes)
+                    delta = zeros(hidden_layer.numNodes)
+                    derivative = zeros(hidden_layer.numNodes)
+                    # Calcolo nuova delta livello corrente
+                    for j in range(0, hidden_layer.numNodes):
+                        derivative[j] = self.derivative(self.activation_function, hidden_layer.weightedSum[j])
+                        # Sommatoria sul valore dei pesi dei nodi
+                        for i in range(0, prev_layer.numNodes):
+                            somma[j] += old_delta[i] * prev_layer.weightMatrix[j][i]
                         delta[j] = derivative[j] + somma[j]
-                        # aggiornamento pesi tra livello corrente e precedente
-                        for i in range(0, prevLayer.numNodes):
-                            prevLayer.weightMatrix[j][i] += self.tasso_apprendimento_alfa * hiddenLayer.output[j] * \
-                                                            oldDelta[i]
+                        # Aggiornamento pesi tra livello corrente e precedente
+                        for i in range(0, prev_layer.numNodes):
+                            prev_layer.weightMatrix[j][i] += self.tasso_apprendimento_alfa * hidden_layer.output[j] * \
+                                                             old_delta[i]
 
-                    # aggiornamento pesi con bias dello strato hidden
-                    # for i in range(0, prevLayer.numNodes):
-                    #     prevLayer.weightMatrix[hiddenLayer.numNodes][i] += self.tasso_apprendimento_alfa * self.bias * oldDelta[i]
-
-                    prevLayer = hiddenLayer
+                    prev_layer = hidden_layer
 
                 # Gestione Particolare dei collegamenti tra strato input e primo strato nascosto
-
-                oldDelta = delta
+                old_delta = delta
                 for j in range(0, self.input_size):
-                    for i in range(0, prevLayer.numNodes):
-                        prevLayer.weightMatrix[j][i] += self.tasso_apprendimento_alfa * float(esempio[j]) * oldDelta[i]
+                    for i in range(0, prev_layer.numNodes):
+                        prev_layer.weightMatrix[j][i] += self.tasso_apprendimento_alfa * float(esempio[j]) * old_delta[
+                            i]
 
-                        # aggiornamento peso con bias nello strato di input
-                        # for i in range(0, prevLayer.numNodes):
-                        #     prevLayer.weightMatrix[self.input_size][i] += self.tasso_apprendimento_alfa * self.bias * oldDelta[i]
-            repeat = repeat + 1
-            s = str('epoca: ' + str(repeat) + '     errore tot: ' + str(erroreTot / len(out)) + '\n')
+            repeat += 1
+            s = str('epoca: ' + str(repeat) + '     errore tot: ' + str(errore_tot / len(out)) + '\n')
             self.report.write(s)
 
     @staticmethod
@@ -172,7 +137,3 @@ class Network:
         run = h
         slope = rise / run
         return slope
-        # print("slope =", slope, ", f(x)*(1-f(x) =",f(x)*(1-f(x)))
-        # return f(x)*(1-f(x))
-
-        # PEZZO DI CODICE DA IMPLEMENTARE DENTRO "TRAIN"

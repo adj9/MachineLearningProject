@@ -1,8 +1,5 @@
 # MachineLearningProject
 
-Realizzazione di un programma per classificatore di dati.
-La classificazione è realizzata tramite gli algoritmi:
-1 - NeuronalNetwork
-2 - BayesianClassifier
-3 - ID3
-I primi due sono implementati utiizzando gli strumenti base di Python. Il terzo è usato utilizzando il modulo Python ... 
+[Python](https://www.python.org/) program target to analyze the various benefits of learning on a DataSet with machine learning techniques such as Neuronal Networks, Bayesian Classifier and ID3.
+
+The first and the second algorithm have been implemented without the use of external libraries, instead for the ID3 algorithm has been taken to black box, without implementing it, from the library [scikit-learn](http://scikit-learn.org/stable/).

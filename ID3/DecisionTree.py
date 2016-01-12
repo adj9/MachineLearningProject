@@ -1,30 +1,25 @@
-__author__ = 'protoman2'
-
 from sklearn import tree
 
-def blackBoxID3(dataset_train, dataset_test):
-    #INSIEME ETICHETTE DEL TRAIN SET
+
+def black_box_id3(dataset_train, dataset_test):
+    # Insieme etichette del train set
     target = list(zip(*dataset_train))[-1]
 
-    #ELIMINAZIONE DELLA COLONNA DEL TARGET DAL DATASET DI TRAIN, PERCHè ALGORITMO clf.fit(dataset_Train, target)
-    # VUOLE SOLO PASSATO COME PARAMETRO :
-    #1) LE COLONNE DEGLI ATTRIBUTI
-    #2) LA COLONNA DEL TARGET
+    # Eliminazione della colonna del target dal dataset di train, perché l'algoritmo clf.fit(dataset_Train, target)
+    # Vuole i seguenti parametri :
+    # 1) le colonne degli attirbuti
+    # 2) la colonna del target
     for x1 in dataset_train:
         del x1[-1]
 
-    #ELIMINAZIONE DELLA COLONNA DEL TARGET DAL DATASET DI TEST, PERCHè ALGORITMO clf.predict(dataset_test)
+    # Eliminazione della colonna del target dal dataset di test, perché l'algoritmo clf.predict(dataset_test)
     for i in dataset_test:
         del i[-1]
 
-    #CREATO IL MODELLO DI CLASSIFICATORE
+    # Creato il modello di classificazione
     clf = tree.DecisionTreeClassifier()
-    #FASE DI TRAIN DEL MODELLO DI CLASSIFICAZIONE clf
+    # Fase di train del modello di classificazione clf
     clf = clf.fit(dataset_train, target)
     # TESTING
-    #LISTA DELLE ETICHETTE PREDETTE
+    # Lista delle etichette predette
     return clf.predict(dataset_test)
-
-
-
-
